@@ -1,0 +1,216 @@
+{
+  "name": "ry0_ Source",
+  "subtitle": "Emulators + Tools",
+  "description": "My personal source for iOS apps (SideStore/AltStore).",
+  "iconURL": "https://CHANGE_ME.com/ry0-icon.png",
+  "website": "https://CHANGE_ME.com",
+  "tintColor": "#00D1C7",
+  "apps": [
+    {
+      "name": "MeloNX",
+      "bundleIdentifier": "CHANGE_ME.bundle.melonx",
+      "developerName": "MeloNX",
+      "localizedDescription": "Nintendo Switch emulator for iOS.",
+      "iconURL": "https://CHANGE_ME.com/apps/melonx/icon.png",
+      "category": "utilities",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "2.2",
+          "buildVersion": "220",
+          "date": "2026-01-17",
+          "localizedDescription": "MeloNX 2.2",
+          "downloadURL": "https://git.ryujinx.app/melonx/emu/-/package_files/1593/download"
+        },
+        {
+          "version": "2.1",
+          "buildVersion": "210",
+          "date": "2026-01-17",
+          "localizedDescription": "MeloNX 2.1",
+          "downloadURL": "https://git.ryujinx.app/melonx/emu/-/package_files/1249/download"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    },
+    {
+      "name": "Amethyst",
+      "bundleIdentifier": "CHANGE_ME.bundle.amethyst",
+      "developerName": "AngelAuraMC",
+      "localizedDescription": "Amethyst for iOS (GitHub Actions build).",
+      "iconURL": "https://CHANGE_ME.com/apps/amethyst/icon.png",
+      "category": "utilities",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "latest",
+          "buildVersion": "1",
+          "date": "2026-01-17",
+          "localizedDescription": "GitHub Actions artifact (may not be a direct IPA link).",
+          "downloadURL": "https://github.com/AngelAuraMC/Amethyst-iOS/actions/runs/21083689301/artifacts/5160804860"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    },
+    {
+      "name": "DolphiniOS",
+      "bundleIdentifier": "CHANGE_ME.bundle.dolphinios",
+      "developerName": "OatmealDome",
+      "localizedDescription": "Dolphin Emulator for iOS (Non-Jailbroken build).",
+      "iconURL": "https://CHANGE_ME.com/apps/dolphinios/icon.png",
+      "category": "utilities",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "latest",
+          "buildVersion": "1",
+          "date": "2026-01-17",
+          "localizedDescription": "Auto-updating (Latest Release)",
+          "downloadURL": "https://github.com/OatmealDome/dolphin-ios/releases/latest/download/Non-Jailbroken.ipa"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    },
+    {
+      "name": "PPSSPP",
+      "bundleIdentifier": "CHANGE_ME.bundle.ppsspp",
+      "developerName": "hrydgard",
+      "localizedDescription": "PSP emulator for iOS.",
+      "iconURL": "https://CHANGE_ME.com/apps/ppsspp/icon.png",
+      "category": "utilities",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "1.19.3",
+          "buildVersion": "1193",
+          "date": "2026-01-17",
+          "localizedDescription": "PPSSPP iOS v1.19.3",
+          "downloadURL": "https://github.com/hrydgard/ppsspp/releases/download/v1.19.3/PPSSPP-iOS-v1.19.3.ipa"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    },
+    {
+      "name": "Pocket Poster",
+      "bundleIdentifier": "CHANGE_ME.bundle.pocketposter",
+      "developerName": "leminlimez",
+      "localizedDescription": "Pocket Poster for iOS.",
+      "iconURL": "https://CHANGE_ME.com/apps/pocketposter/icon.png",
+      "category": "utilities",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "latest",
+          "buildVersion": "1",
+          "date": "2026-01-17",
+          "localizedDescription": "Auto-updating (Latest Release)",
+          "downloadURL": "https://github.com/leminlimez/Pocket-Poster/releases/latest/download/Pocket_Poster.ipa"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    },
+    {
+      "name": "Feather",
+      "bundleIdentifier": "CHANGE_ME.bundle.feather",
+      "developerName": "khcrysalis",
+      "localizedDescription": "Feather signer for iOS.",
+      "iconURL": "https://CHANGE_ME.com/apps/feather/icon.png",
+      "category": "utilities",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "latest",
+          "buildVersion": "1",
+          "date": "2026-01-17",
+          "localizedDescription": "Auto-updating (Latest Release)",
+          "downloadURL": "https://github.com/khcrysalis/Feather/releases/latest/download/Feather.ipa"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    },
+    {
+      "name": "ManicEMU",
+      "bundleIdentifier": "CHANGE_ME.bundle.manicemu",
+      "developerName": "Manic-EMU",
+      "localizedDescription": "ManicEMU (SideloadJIT build).",
+      "iconURL": "https://CHANGE_ME.com/apps/manicemu/icon.png",
+      "category": "utilities",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "1.8.1",
+          "buildVersion": "181",
+          "date": "2026-01-17",
+          "localizedDescription": "ManicEMU v1.8.1 (SideloadJIT)",
+          "downloadURL": "https://github.com/Manic-EMU/ManicEMU/releases/download/v1.8.1/ManicEMU.v1.8.1.SideloadJIT.ipa"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    },
+    {
+      "name": "UTM",
+      "bundleIdentifier": "CHANGE_ME.bundle.utm",
+      "developerName": "utmapp",
+      "localizedDescription": "Virtual machines for iOS.",
+      "iconURL": "https://CHANGE_ME.com/apps/utm/icon.png",
+      "category": "utilities",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "latest",
+          "buildVersion": "1",
+          "date": "2026-01-17",
+          "localizedDescription": "Auto-updating (Latest Release)",
+          "downloadURL": "https://github.com/utmapp/UTM/releases/latest/download/UTM.ipa"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    },
+    {
+      "name": "StikDebug",
+      "bundleIdentifier": "CHANGE_ME.bundle.stikdebug",
+      "developerName": "StephenDev0",
+      "localizedDescription": "StikDebug iOS tool.",
+      "iconURL": "https://CHANGE_ME.com/apps/stikdebug/icon.png",
+      "category": "utilities",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "2.3.7",
+          "buildVersion": "237",
+          "date": "2026-01-17",
+          "localizedDescription": "StikDebug 2.3.7",
+          "downloadURL": "https://github.com/StephenDev0/StikDebug/releases/download/2.3.7/StikDebug-2.3.7.ipa"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    }
+  ],
+  "news": []
+}

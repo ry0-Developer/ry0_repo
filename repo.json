@@ -43,7 +43,7 @@
       "bundleIdentifier": "com.stossy11.MelonNX",
       "developerName": "MeloNX",
       "localizedDescription": "Nintendo Switch emulator for iOS. Auto-updated to the latest build.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/melonx.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/MeloNX.png",
       "category": "emulators",
       "versions": [
         {

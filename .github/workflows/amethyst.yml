@@ -1,9 +1,9 @@
-name: Update MeloNX
+name: Update Amethyst
 
 on:
   schedule:
-    - cron: "0 */12 * * *"
-  workflow_dispatch:
+    - cron: "0 */12 * * *"  # يعمل كل 12 ساعة
+  workflow_dispatch:        # زر التشغيل اليدوي
 
 jobs:
   update:
@@ -15,35 +15,47 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download and Verify
+      - name: Prepare Folders
         run: |
-          LATEST_ID=$(curl -s "https://git.ryujinx.app/melonx/emu/-/releases" | grep -oP 'package_files/\K[0-9]+' | sort -rn | head -n 1)
-          if [ -z "$LATEST_ID" ]; then LATEST_ID="1824"; fi
-          mkdir -p apps/emulators
-          curl -L "https://git.ryujinx.app/melonx/emu/-/package_files/$LATEST_ID/download" -o apps/emulators/melonx.ipa
+          mkdir -p apps/games
+
+      - name: Download Latest Amethyst
+        run: |
+          # البحث عن أحدث إصدار بصيغة ipa في مستودع Amethyst الرسمي
+          LATEST_IPA_URL=$(curl -s https://api.github.com/repos/Amethyst-iOS/amethyst/releases/latest | grep "browser_download_url.*\.ipa" | cut -d '"' -f 4 | head -n 1)
+          
+          # إذا كان لديك رابط تحميل مباشر آخر تعتمده لـ Amethyst، ضعه بين علامتي التنصيص في السطر التالي بدلاً من المتغير
+          if [ -z "$LATEST_IPA_URL" ]; then
+            echo "Error: Could not find latest Amethyst IPA. Please check the source URL."
+            exit 1
+          fi
+          
+          echo "Downloading Amethyst from: $LATEST_IPA_URL"
+          curl -L "$LATEST_IPA_URL" -o apps/games/amethyst.ipa
 
       - name: Upload to Nightly Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # رفع الملف إلى قسم الريليس لضمان استقرار التحميل
           gh release create nightly --title "Nightly Builds" --notes "Auto-updated assets" || echo "Release exists"
-          gh release upload nightly apps/emulators/melonx.ipa --clobber
+          gh release upload nightly apps/games/amethyst.ipa --clobber
 
-      - name: Inject Data into JSON
+      - name: Update JSON Data (Amethyst Only)
         run: |
-          VERSION="Build-$LATEST_ID"
+          VERSION=$(date +'%Y.%m.%d')
           DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          FILESIZE=$(stat -c%s "apps/emulators/melonx.ipa")
+          FILESIZE=$(stat -c%s "apps/games/amethyst.ipa")
           
-          # تعديل الفهرس [0] فقط للحفاظ على النسخ القديمة في المصفوفة
-          jq ".apps[1].versions[0].version = \"$VERSION\" | 
-              .apps[1].versions[0].date = \"$DATE_NOW\" | 
-              .apps[1].versions[0].size = $FILESIZE" repo.json > temp.json && mv temp.json repo.json
+          # تعديل الفهرس [0] الخاص بـ Amethyst فقط لكي لا يخرب بيانات MeloNX
+          jq ".apps[0].versions[0].version = \"$VERSION\" | 
+              .apps[0].versions[0].date = \"$DATE_NOW\" | 
+              .apps[0].versions[0].size = $FILESIZE" repo.json > temp.json && mv temp.json repo.json
 
       - name: Commit Changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "Auto-update MeloNX while preserving history" || echo "No changes"
+          git commit -m "Auto-update Amethyst" || echo "No changes"
           git push

@@ -1,97 +1,24 @@
 {
   "name": "ry0_repo",
   "identifier": "com.ry0.repo",
-  "sourceURL": "https://ry0-developer.github.io/ry0_repo",
+  "sourceURL": "https://ry0-developer.github.io/ry0_repo/repo.json",
   "apps": [
     {
-      "name": "Angel Aura Amethyst",
+      "name": "Amethyst",
       "bundleIdentifier": "org.angelauramc.amethyst",
-      "developerName": "AngelAuraMC",
+      "developerName": "crystall1ne.dev",
       "subtitle": "Bringing Minecraft: Java Edition to mobile devices.",
-      "localizedDescription": "THESE BUILDS WILL NOT AUTOMATICALLY UPDATE AND YOU WILL NOT RECEIVE ANY NOTIFICATIONS FOR SUCH (at least, right now. I'm working on it.). Angel Aura Amethyst is a Minecraft: Java Edition launcher for iOS based on the PojavLauncher project.\n\n\u2022 Play most versions of Minecraft, from the very first beta to the latest snapshots.\n\u2022 Customize with mods, resource packs, and compatible shaders\n\u2022 Create multiple instances of Minecraft for multiple versions\n\u2022 Adjust on-screen controls to your liking, or use keyboard and mouse or controllers\n\u2022 Play online with full Java Edition servers\n...and so much more!\n\nNotice: Amethyst requires JIT to function correctly. This application automatically enables JIT with AltServer, TrollStore, or when jailbroken, however other methods can be used if required.",
-      "iconURL": "https://raw.githubusercontent.com/AngelAuraMC/Amethyst-iOS/main/Natives/Assets.xcassets/AppIcon-Light.appiconset/1024x1024.png",
+      "localizedDescription": "Amethyst nightly build auto-updated via GitHub Actions. Includes JIT and memory entitlements.",
+      "iconURL": "https://ry0-developer.github.io/ry0_repo/icons/Amethyst.png",
       "tintColor": "#9649B8",
       "category": "games",
-      "screenshots": {
-        "iphone": [
-          {
-            "imageURL": "https://alt.crystall1ne.dev/net.kdt.pojavlauncher_iphone-ipod_1.PNG",
-            "width": 2796,
-            "height": 1290
-          },
-          {
-            "imageURL": "https://alt.crystall1ne.dev/net.kdt.pojavlauncher_iphone-ipod_2.PNG",
-            "width": 2796,
-            "height": 1290
-          },
-          {
-            "imageURL": "https://alt.crystall1ne.dev/net.kdt.pojavlauncher_iphone-ipod_3.PNG",
-            "width": 2796,
-            "height": 1290
-          },
-          {
-            "imageURL": "https://alt.crystall1ne.dev/net.kdt.pojavlauncher_iphone-ipod_4.PNG",
-            "width": 2796,
-            "height": 1290
-          }
-        ],
-        "ipad": [
-          {
-            "imageURL": "https://alt.crystall1ne.dev/net.kdt.pojavlauncher_iphone-ipod_1.PNG",
-            "width": 2796,
-            "height": 1290
-          },
-          {
-            "imageURL": "https://alt.crystall1ne.dev/net.kdt.pojavlauncher_iphone-ipod_2.PNG",
-            "width": 2796,
-            "height": 1290
-          },
-          {
-            "imageURL": "https://alt.crystall1ne.dev/net.kdt.pojavlauncher_iphone-ipod_3.PNG",
-            "width": 2796,
-            "height": 1290
-          },
-          {
-            "imageURL": "https://alt.crystall1ne.dev/net.kdt.pojavlauncher_iphone-ipod_4.PNG",
-            "width": 2796,
-            "height": 1290
-          }
-        ]
-      },
       "versions": [
         {
-          "version": "1.0.ba4a002",
-          "date": "2026-03-15T05:22:01.984176+00:00",
-          "localizedDescription": "Thanks for helping test Amethyst! To see what's new, check commit \"ba4a002\" on the GitHub repo.",
-          "downloadURL": "https://alt.crystall1ne.dev/resources/amethyst/ba4a002/org.angelauramc.amethyst-1.0-ios.ipa",
+          "version": "auto",
+          "date": "2026-04-02T00:00:00Z",
+          "localizedDescription": "Latest auto-compiled nightly build.",
+          "downloadURL": "https://ry0-developer.github.io/ry0_repo/apps/games/amethyst.ipa",
           "size": 150357372,
-          "beta": true,
-          "minOSVersion": "14.0"
-        },
-        {
-          "version": "1.0-ba4a002",
-          "date": "2026-03-15T05:04:32.087166+00:00",
-          "localizedDescription": "Thanks for helping test Amethyst! To see what's new, check commit \"ba4a002\" on the GitHub repo.",
-          "downloadURL": "https://alt.crystall1ne.dev/resources/amethyst/ba4a002/org.angelauramc.amethyst-1.0-ios.ipa",
-          "size": 150357374,
-          "beta": true,
-          "minOSVersion": "14.0"
-        },
-        {
-          "version": "1.0-287e821",
-          "date": "2026-03-07T03:23:43.773901+00:00",
-          "localizedDescription": "Thanks for helping test Amethyst! To see what's new, check commit \"287e821\" on the GitHub repo.",
-          "downloadURL": "https://alt.crystall1ne.dev/resources/amethyst/287e821/org.angelauramc.amethyst-1.0-ios.ipa",
-          "size": 150357328,
-          "beta": true,
-          "minOSVersion": "14.0"
-        },
-        {
-          "version": "1.0-e49c3fa",
-          "date": "2026-03-07T02:54:16.444233+00:00",
-          "localizedDescription": "Thanks for helping test Amethyst! To see what's new, check commit \"e49c3fa\" on the GitHub repo.",
-          "downloadURL": "https://alt.crystall1ne.dev/resources/amethyst/e49c3fa/org.angelauramc.amethyst-1.0-ios.ipa",
-          "size": 150357349,
           "beta": true,
           "minOSVersion": "14.0"
         }
@@ -116,4 +43,6 @@
           "NSLocalNetworkUsageDescription": "Amethyst uses the local network to find and communicate with AltServer and LAN servers."
         }
       }
-    },
+    }
+  ]
+}

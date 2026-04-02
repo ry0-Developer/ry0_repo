@@ -1,0 +1,16 @@
+{
+  "name": "ry0_repo",
+  "identifier": "com.ry0.repo",
+  "sourceURL": "https://ry0-developer.github.io/ry0_repo",
+  "apps": [
+    {
+      "name": "Amethyst",
+      "bundleIdentifier": "org.angelauramc.amethyst",
+      "developerName": "crystall1ne.dev",
+      "version": "auto",
+      "downloadURL": "https://ry0-developer.github.io/sami-repo/apps/Minecraft/amethyst.ipa",
+      "iconURL": "https://ry0-developer.github.io/ry0_repo/icons/amethyst.png",
+      "localizedDescription": "Amethyst nightly build"
+    }
+  ]
+}

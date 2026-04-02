@@ -2,6 +2,7 @@
   "name": "ry0_repo",
   "identifier": "com.ry0.repo",
   "sourceURL": "https://ry0-developer.github.io/ry0_repo/repo.json",
+  "iconURL": "https://github.com/ry0-Developer/ry0_repo/blob/main/icons/ry0_.jpg",
   "apps": [
     {
       "name": "Amethyst",

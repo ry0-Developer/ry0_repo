@@ -1,0 +1,30 @@
+name: 🔄 Update ALL Apps
+
+on:
+  workflow_dispatch: # هذا يعني أنه يشتغل بضغطة زر منك فقط
+
+jobs:
+  trigger-all:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write # إعطاء الصلاحية لتشغيل الروبوتات الأخرى
+      contents: read
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run All Workflows
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Triggering all app update workflows..."
+          gh workflow run amethyst.yml || echo "Failed to trigger Amethyst"
+          gh workflow run dolphinios.yml || echo "Failed to trigger DolphiniOS"
+          gh workflow run getmoreram.yml || echo "Failed to trigger GetMoreRam"
+          gh workflow run ipsx2.yml || echo "Failed to trigger iPSX2"
+          gh workflow run manic.yml || echo "Failed to trigger Manic"
+          gh workflow run melonx.yml || echo "Failed to trigger MeloNX"
+          gh workflow run ppsspp.yml || echo "Failed to trigger PPSSPP"
+          gh workflow run xenios.yml || echo "Failed to trigger Xenios"
+          echo "All workflows triggered successfully!"

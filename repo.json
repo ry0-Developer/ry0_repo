@@ -1,23 +1,23 @@
 {
   "name": "ry0_",
-  "identifier": "com.ry0_.repo2",
+  "identifier": "com.ry0_.repo.final",
   "sourceURL": "https://ry0-developer.github.io/ry0_repo/repo.json",
-  "iconURL": "https://ry0-developer.github.io/ry0_repo/icons/ry0_.jpg?v=2",
+  "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/ry0_.jpg",
   "apps": [
     {
       "name": "Amethyst",
       "bundleIdentifier": "org.angelauramc.amethyst",
       "developerName": "crystall1ne.dev",
       "subtitle": "Bringing Minecraft: Java Edition to mobile devices.",
-      "localizedDescription": "Amethyst nightly build auto-updated via GitHub Actions. Includes JIT and memory entitlements.",
-      "iconURL": "https://ry0-developer.github.io/ry0_repo/icons/Amethyst.png",
+      "localizedDescription": "Amethyst nightly build auto-updated via GitHub Actions.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Amethyst.png",
       "tintColor": "#9649B8",
       "category": "games",
       "versions": [
         {
           "version": "auto",
           "date": "2026-04-02T00:00:00Z",
-          "localizedDescription": "Latest auto-compiled nightly build.",
+          "localizedDescription": "Latest nightly build.",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/amethyst.ipa",
           "size": 150357372,
           "beta": true,
@@ -27,22 +27,11 @@
       "appPermissions": {
         "entitlements": [
           "com.apple.private.security.container-required",
-          "com.apple.private.mobileinstall.upgrade-enabled",
-          "com.apple.private.security.no-sandbox",
-          "com.apple.private.security.storage.AppDataContainers",
-          "com.apple.private.security.storage.MobileDocuments",
-          "com.apple.security.iokit-user-client-class",
-          "platform-application",
           "get-task-allow",
           "com.apple.developer.kernel.extended-virtual-addressing",
           "com.apple.developer.kernel.increased-memory-limit",
-          "com.apple.private.memorystatus",
           "local.sandboxed-jit"
-        ],
-        "privacy": {
-          "NSMicrophoneUsageDescription": "Amethyst uses the microphone to enable support for voice chat mods.",
-          "NSLocalNetworkUsageDescription": "Amethyst uses the local network to find and communicate with AltServer and LAN servers."
-        }
+        ]
       }
     },
     {
@@ -50,7 +39,7 @@
       "bundleIdentifier": "com.melonx.emu",
       "developerName": "MeloNX",
       "localizedDescription": "Nintendo Switch emulator for iOS. Auto-updated nightly.",
-      "iconURL": "https://ry0-developer.github.io/ry0_repo/icons/melonx.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/melonx.png",
       "tintColor": "#00D1C7",
       "category": "emulators",
       "versions": [
@@ -59,7 +48,7 @@
           "date": "2026-04-02T00:00:00Z",
           "localizedDescription": "Auto-updated Nightly Build",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
-          "size": 1000000,
+          "size": 100000000,
           "beta": true,
           "minOSVersion": "14.0"
         }

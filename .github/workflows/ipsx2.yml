@@ -18,7 +18,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Fetch Latest PSX2
+      - name: Fetch Latest iPSX2
         run: |
           mkdir -p apps/emulators
           API_URL="https://api.github.com/repos/otti83/iPSX2/releases/latest"
@@ -26,30 +26,31 @@ jobs:
           REAL_VERSION=$(curl -s "$API_URL" | jq -r '.tag_name' | sed 's/^v//')
           
           echo "Version: $REAL_VERSION"
-          curl -L "$DOWNLOAD_URL" -o apps/emulators/psx2.ipa
+          curl -L "$DOWNLOAD_URL" -o apps/emulators/ipsx2.ipa
           echo "$REAL_VERSION" > version.txt
 
       - name: Upload to Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload nightly apps/emulators/psx2.ipa --clobber || gh release create nightly apps/emulators/psx2.ipa --clobber
+          gh release upload nightly apps/emulators/ipsx2.ipa --clobber || gh release create nightly apps/emulators/ipsx2.ipa --clobber
 
       - name: Update JSON Data
         run: |
           REAL_VERSION=$(cat version.txt)
           DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          FILESIZE=$(stat -c%s "apps/emulators/psx2.ipa" || echo "80000000")
+          FILESIZE=$(stat -c%s "apps/emulators/ipsx2.ipa" || echo "80000000")
           
+          # هنا الروبوت صار يبحث عن الاسم المصحح "iPSX2"
           jq --arg version "$REAL_VERSION" \
              --arg date "$DATE_NOW" \
              --argjson size "$FILESIZE" \
-             '(.apps[] | select(.name == "PSX2")).versions[0] |= . + {version: $version, date: $date, size: $size}' repo.json > temp.json && mv temp.json repo.json
+             '(.apps[] | select(.name == "iPSX2")).versions[0] |= . + {version: $version, date: $date, size: $size}' repo.json > temp.json && mv temp.json repo.json
 
       - name: Commit Changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "Auto-update PSX2 to $REAL_VERSION" || echo "No changes"
+          git commit -m "Auto-update iPSX2 to $REAL_VERSION" || echo "No changes"
           git push

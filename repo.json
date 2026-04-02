@@ -44,15 +44,14 @@
       "developerName": "MeloNX",
       "localizedDescription": "Nintendo Switch emulator for iOS. Auto-updated to the latest build.",
       "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/MeloNX.png",
+      "tintColor": "#f8566f",
       "category": "emulators",
       "versions": [
         {
           "version": "Latest Build",
           "date": "2026-04-02T00:00:00Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
-          "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Amethyst.png",
-          "tintColor": "#f8566f",
-          "category": "emulators",
+          "size": 110000000
         }
       ],
       "appPermissions": {

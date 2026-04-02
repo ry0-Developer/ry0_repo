@@ -9,14 +9,11 @@ jobs:
   update:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # This fixes the hidden upload error
+      contents: write  
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Create folders
-        run: mkdir -p apps/games
+        uses: actions/checkout@v4  # FIXED WARNING: Updated to v4
 
       - name: Download Amethyst ZIP
         run: |
@@ -25,23 +22,28 @@ jobs:
       - name: Extract IPA
         run: unzip amethyst.zip
 
-      - name: Move IPA
+      - name: Rename IPA
         run: |
           IPA=$(find . -name "*.ipa" | head -n 1)
-          mv "$IPA" apps/games/amethyst.ipa
+          mv "$IPA" amethyst.ipa
 
-      - name: Cleanup
-        run: rm -rf amethyst.zip
+      - name: Upload to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create a 'nightly' release if it doesn't exist, then upload the big IPA file to it
+          gh release create nightly --title "Nightly Builds" --notes "Auto-updated nightly builds" || echo "Release already exists"
+          gh release upload nightly amethyst.ipa --clobber
 
       - name: Update version
         run: |
           VERSION=$(date +'%Y.%m.%d.%H%M')
           sed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" repo.json
 
-      - name: Commit & push
+      - name: Commit & push JSON
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add apps/games/amethyst.ipa repo.json
+          git add repo.json
           git commit -m "Update Amethyst to $VERSION" || echo "No changes to commit"
           git push

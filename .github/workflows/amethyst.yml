@@ -5,7 +5,6 @@ on:
     - cron: "0 */6 * * *"  # every 6 hours
   workflow_dispatch:
 
-# THIS FIXES THE NODE 20 WARNING
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -38,10 +37,10 @@ jobs:
           gh release create nightly --title "Nightly Builds" --notes "Auto-updated nightly builds" || echo "Release already exists"
           gh release upload nightly amethyst.ipa --clobber
 
-      - name: Update version
+      - name: Safely update JSON version
         run: |
           VERSION=$(date +'%Y.%m.%d.%H%M')
-          sed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" repo.json
+          jq ".apps[0].versions[0].version = \"$VERSION\"" repo.json > temp.json && mv temp.json repo.json
 
       - name: Commit & push JSON
         run: |

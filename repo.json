@@ -2,7 +2,6 @@
   "name": "ry0_repo",
   "identifier": "com.ry0.repo",
   "sourceURL": "https://ry0-developer.github.io/ry0_repo/repo.json",
-  "iconURL": "https://github.com/ry0-Developer/ry0_repo/blob/main/icons/ry0_.jpg",
   "apps": [
     {
       "name": "Amethyst",
@@ -15,7 +14,7 @@
       "category": "games",
       "versions": [
         {
-          "version": "2026.04.02.0509",
+          "version": "auto",
           "date": "2026-04-02T00:00:00Z",
           "localizedDescription": "Latest auto-compiled nightly build.",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/amethyst.ipa",

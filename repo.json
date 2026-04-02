@@ -194,10 +194,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "Latest",
-          "date": "2026-04-02T00:00:00Z",
+          "version": "nightly",
+          "date": "2026-04-02T17:31:28Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/getmoreram.ipa",
-          "size": 30000000
+          "size": 2613093
         }
       ]
     }

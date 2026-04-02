@@ -22,31 +22,31 @@ jobs:
         run: |
           echo "Starting update queue..."
           gh workflow run amethyst.yml
-          echo "Amethyst triggered. Waiting 60 seconds..."
+          echo "Amethyst triggered. Waiting 120 seconds..."
           sleep 120
           
           gh workflow run dolphinios.yml
-          echo "DolphiniOS triggered. Waiting 60 seconds..."
+          echo "DolphiniOS triggered. Waiting 120 seconds..."
           sleep 120
           
           gh workflow run getmoreram.yml
-          echo "GetMoreRam triggered. Waiting 60 seconds..."
+          echo "GetMoreRam triggered. Waiting 120 seconds..."
           sleep 120
           
           gh workflow run ipsx2.yml
-          echo "iPSX2 triggered. Waiting 60 seconds..."
+          echo "iPSX2 triggered. Waiting 120 seconds..."
           sleep 120
           
           gh workflow run manic.yml
-          echo "Manic triggered. Waiting 60 seconds..."
+          echo "Manic triggered. Waiting 120 seconds..."
           sleep 120
           
           gh workflow run melonx.yml
-          echo "MeloNX triggered. Waiting 60 seconds..."
+          echo "MeloNX triggered. Waiting 120 seconds..."
           sleep 120
           
           gh workflow run ppsspp.yml
-          echo "PPSSPP triggered. Waiting 60 seconds..."
+          echo "PPSSPP triggered. Waiting 120 seconds..."
           sleep 120
           
           gh workflow run xenios.yml

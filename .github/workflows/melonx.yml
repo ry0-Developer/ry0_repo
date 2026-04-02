@@ -2,11 +2,8 @@ name: Update MeloNX
 
 on:
   schedule:
-    - cron: "0 */12 * * *"  # يفحص وجود تحديث كل 12 ساعة
-  workflow_dispatch:        # زر التشغيل اليدوي
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
 
 jobs:
   update:
@@ -23,18 +20,16 @@ jobs:
 
       - name: Detect and Download Latest MeloNX
         run: |
-          # 1. البحث عن أحدث رقم Package ID في صفحة المطور
-          # يبحث عن نمط package_files/XXXX/download ويأخذ الرقم الأكبر
+          # البحث عن أحدث رقم Package ID (Build Number)
           LATEST_ID=$(curl -s "https://git.ryujinx.app/melonx/emu/-/releases" | grep -oP 'package_files/\K[0-9]+' | sort -rn | head -n 1)
           
+          # إذا فشل البحث، نستخدم رقم النسخة المستقرة التي أعطيتني إياها كاحتياط
           if [ -z "$LATEST_ID" ]; then
-            echo "Could not detect ID, falling back to 1824"
             LATEST_ID="1824"
           fi
           
           URL="https://git.ryujinx.app/melonx/emu/-/package_files/$LATEST_ID/download"
-          echo "Latest ID detected: $LATEST_ID"
-          echo "Downloading from: $URL"
+          echo "Latest Build ID: $LATEST_ID"
           
           curl -L "$URL" -o apps/emulators/melonx.ipa
 
@@ -47,12 +42,12 @@ jobs:
 
       - name: Update JSON Data
         run: |
-          # استخراج التاريخ والوقت وحجم الملف بدقة
-          VERSION=$(date +'%Y.%m.%d.%H%M')
+          # تحديث بيانات النسخة الأولى فقط (Latest) لتبقى النسخ القديمة كما هي
+          VERSION="Build-$LATEST_ID"
           DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           FILESIZE=$(stat -c%s "apps/emulators/melonx.ipa")
           
-          # تحديث ملف repo.json بالبيانات الجديدة لـ MeloNX (التطبيق الثاني)
+          # تحديث الإصدار، التاريخ، والحجم بدقة
           jq ".apps[1].versions[0].version = \"$VERSION\"" repo.json > temp.json && mv temp.json repo.json
           jq ".apps[1].versions[0].date = \"$DATE_NOW\"" repo.json > temp.json && mv temp.json repo.json
           jq ".apps[1].versions[0].size = $FILESIZE" repo.json > temp.json && mv temp.json repo.json

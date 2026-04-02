@@ -146,10 +146,10 @@
       "category": "emulators",
       "versions": [
         {
-          "version": "Latest",
-          "date": "2026-04-02T00:00:00Z",
+          "version": "release-v1.0.1-build-9288",
+          "date": "2026-04-02T17:30:48Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/xenios.ipa",
-          "size": 60000000
+          "size": 11703406
         }
       ],
       "appPermissions": {

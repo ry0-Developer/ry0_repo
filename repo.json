@@ -40,24 +40,19 @@
     },
     {
       "name": "MeloNX",
-      "bundleIdentifier": "com.melonx.emu",
+      "bundleIdentifier": "com.stossy11.MelonNX",
       "developerName": "MeloNX",
-      "localizedDescription": "Nintendo Switch emulator for iOS.",
+      "localizedDescription": "Nintendo Switch emulator for iOS. Auto-updated to the latest build.",
       "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/melonx.png",
       "category": "emulators",
       "versions": [
         {
-          "version": "Build-",
-          "date": "2026-04-02T12:14:40Z",
+          "version": "Latest Build",
+          "date": "2026-04-02T00:00:00Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
-          "size": 94207474
-        },
-        {
-          "version": "Stable (Build 1593)",
-          "date": "2025-12-15T00:00:00Z",
-          "localizedDescription": "Previous stable build.",
-          "downloadURL": "https://git.ryujinx.app/melonx/emu/-/package_files/1593/download",
-          "size": 105000000
+          "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Amethyst.png",
+          "tintColor": "#f8566f",
+          "category": "emulators",
         }
       ],
       "appPermissions": {

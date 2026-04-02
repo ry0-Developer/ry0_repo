@@ -44,6 +44,32 @@
           "NSLocalNetworkUsageDescription": "Amethyst uses the local network to find and communicate with AltServer and LAN servers."
         }
       }
+    },
+    {
+      "name": "MeloNX",
+      "bundleIdentifier": "com.melonx.emu",
+      "developerName": "MeloNX",
+      "localizedDescription": "Nintendo Switch emulator for iOS. Auto-updated nightly.",
+      "iconURL": "https://ry0-developer.github.io/ry0_repo/icons/melonx.png",
+      "tintColor": "#00D1C7",
+      "category": "emulators",
+      "versions": [
+        {
+          "version": "auto",
+          "date": "2026-04-02T00:00:00Z",
+          "localizedDescription": "Auto-updated Nightly Build",
+          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
+          "beta": true,
+          "minOSVersion": "14.0"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "com.apple.developer.kernel.extended-virtual-addressing",
+          "com.apple.developer.kernel.increased-memory-limit",
+          "local.sandboxed-jit"
+        ]
+      }
     }
   ]
 }

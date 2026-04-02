@@ -1,0 +1,52 @@
+name: Update MeloNX
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Get Latest MeloNX IPA
+        run: |
+          # هذا السطر يذهب لصفحة الإصدارات ويجلب أول رابط تحميل ينتهي بـ .ipa
+          DOWNLOAD_URL=$(curl -s "https://git.ryujinx.app/melonx/emu/-/releases" | grep -oP '(?<=href=")[^"]+\.ipa' | head -n 1)
+          
+          # إكمال الرابط إذا كان ناقصاً
+          if [[ $DOWNLOAD_URL != http* ]]; then
+            DOWNLOAD_URL="https://git.ryujinx.app$DOWNLOAD_URL"
+          fi
+          
+          echo "Downloading from: $DOWNLOAD_URL"
+          curl -L "$DOWNLOAD_URL" -o melonx.ipa
+
+      - name: Upload to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create nightly --title "Nightly Builds" --notes "Auto-updated nightly builds" || echo "Release already exists"
+          gh release upload nightly melonx.ipa --clobber
+
+      - name: Safely update JSON version
+        run: |
+          VERSION=$(date +'%Y.%m.%d.%H%M')
+          jq ".apps[1].versions[0].version = \"$VERSION\"" repo.json > temp.json && mv temp.json repo.json
+
+      - name: Commit & push JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add repo.json
+          git commit -m "Update MeloNX to $VERSION" || echo "No changes to commit"
+          git push

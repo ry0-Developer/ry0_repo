@@ -62,6 +62,144 @@
           "local.sandboxed-jit"
         ]
       }
+    },
+    {
+      "name": "DolphiniOS",
+      "bundleIdentifier": "me.oatmealDome.DolphiniOS",
+      "developerName": "OatmealDome",
+      "localizedDescription": "GameCube and Wii emulator for iOS.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/dolphinios.png",
+      "tintColor": "#007AFF",
+      "category": "emulators",
+      "versions": [
+        {
+          "version": "Latest",
+          "date": "2026-04-02T00:00:00Z",
+          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/dolphinios.ipa",
+          "size": 100000000
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "get-task-allow",
+          "com.apple.developer.kernel.extended-virtual-addressing",
+          "com.apple.developer.kernel.increased-memory-limit",
+          "local.sandboxed-jit"
+        ]
+      }
+    },
+    {
+      "name": "PPSSPP",
+      "bundleIdentifier": "org.ppsspp.ppsspp",
+      "developerName": "Henrik Rydgård",
+      "localizedDescription": "PSP emulator for iOS.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/ppsspp.png",
+      "tintColor": "#224A8B",
+      "category": "emulators",
+      "versions": [
+        {
+          "version": "Latest",
+          "date": "2026-04-02T00:00:00Z",
+          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/ppsspp.ipa",
+          "size": 50000000
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "get-task-allow",
+          "local.sandboxed-jit"
+        ]
+      }
+    },
+    {
+      "name": "iPSX2",
+      "bundleIdentifier": "com.ipsx2.ios",
+      "developerName": "otti83",
+      "localizedDescription": "PlayStation 2 emulator for iOS.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/ipsx2.png",
+      "tintColor": "#1B1280",
+      "category": "emulators",
+      "versions": [
+        {
+          "version": "Latest",
+          "date": "2026-04-02T00:00:00Z",
+          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/ipsx2.ipa",
+          "size": 80000000
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "get-task-allow",
+          "com.apple.developer.kernel.extended-virtual-addressing",
+          "com.apple.developer.kernel.increased-memory-limit",
+          "local.sandboxed-jit"
+        ]
+      }
+    },
+    {
+      "name": "Xenios",
+      "bundleIdentifier": "com.xenios.app",
+      "developerName": "Xenios",
+      "localizedDescription": "Xenios emulator port for iOS.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/xenios.png",
+      "tintColor": "#FF5733",
+      "category": "emulators",
+      "versions": [
+        {
+          "version": "Latest",
+          "date": "2026-04-02T00:00:00Z",
+          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/xenios.ipa",
+          "size": 60000000
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "get-task-allow",
+          "local.sandboxed-jit"
+        ]
+      }
+    },
+    {
+      "name": "Manic",
+      "bundleIdentifier": "com.manicemu.ios",
+      "developerName": "Manic-EMU",
+      "localizedDescription": "All-in-one retro game emulator for iOS. Packed with powerful features and a sleek UI.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/manic.png",
+      "tintColor": "#FF2D55",
+      "category": "emulators",
+      "versions": [
+        {
+          "version": "Latest",
+          "date": "2026-04-02T00:00:00Z",
+          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/manic.ipa",
+          "size": 150000000
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "get-task-allow",
+          "com.apple.developer.kernel.extended-virtual-addressing",
+          "com.apple.developer.kernel.increased-memory-limit",
+          "local.sandboxed-jit"
+        ]
+      }
+    },
+    {
+      "name": "GetMoreRam",
+      "bundleIdentifier": "com.hugeblack.getmoreram",
+      "developerName": "hugeBlack",
+      "localizedDescription": "A utility app to clear and free up RAM on iOS devices.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/getmoreram.png",
+      "tintColor": "#000000",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "Latest",
+          "date": "2026-04-02T00:00:00Z",
+          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/getmoreram.ipa",
+          "size": 30000000
+        }
+      ]
     }
   ]
 }

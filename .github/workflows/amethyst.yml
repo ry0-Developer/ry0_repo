@@ -1,0 +1,45 @@
+name: Update Amethyst
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"  # every 6 hours
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Create folders
+        run: mkdir -p apps/tools
+
+      - name: Download Amethyst ZIP
+        run: |
+          curl -L "https://nightly.link/AngelAuraMC/Amethyst-iOS/workflows/development/main/org.angelauramc.amethyst-ios.ipa.zip" -o amethyst.zip
+
+      - name: Extract IPA
+        run: unzip amethyst.zip
+
+      - name: Move IPA
+        run: |
+          IPA=$(find . -name "*.ipa" | head -n 1)
+          mv "$IPA" apps/tools/amethyst.ipa
+
+      - name: Cleanup
+        run: rm -rf amethyst.zip
+
+      - name: Update version
+        run: |
+          VERSION=$(date +'%Y.%m.%d.%H%M')
+          sed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" repo.json
+
+      - name: Commit & push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update Amethyst"
+          git push

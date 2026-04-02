@@ -15,36 +15,35 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download MeloNX
+      - name: Download and Verify
         run: |
           LATEST_ID=$(curl -s "https://git.ryujinx.app/melonx/emu/-/releases" | grep -oP 'package_files/\K[0-9]+' | sort -rn | head -n 1)
           if [ -z "$LATEST_ID" ]; then LATEST_ID="1824"; fi
-          URL="https://git.ryujinx.app/melonx/emu/-/package_files/$LATEST_ID/download"
           mkdir -p apps/emulators
-          curl -L "$URL" -o apps/emulators/melonx.ipa
+          curl -L "https://git.ryujinx.app/melonx/emu/-/package_files/$LATEST_ID/download" -o apps/emulators/melonx.ipa
 
-      - name: Upload Release
+      - name: Upload to Nightly Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create nightly --title "Nightly Builds" --notes "Auto-updated" || echo "Exists"
+          gh release create nightly --title "Nightly Builds" --notes "Auto-updated assets" || echo "Release exists"
           gh release upload nightly apps/emulators/melonx.ipa --clobber
 
-      - name: Update JSON (Safely)
+      - name: Inject Data into JSON
         run: |
           VERSION="Build-$LATEST_ID"
           DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           FILESIZE=$(stat -c%s "apps/emulators/melonx.ipa")
           
-          # تعديل الفهرس [0] فقط لعدم حذف النسخ القديمة
+          # تعديل الفهرس [0] فقط للحفاظ على النسخ القديمة في المصفوفة
           jq ".apps[1].versions[0].version = \"$VERSION\" | 
               .apps[1].versions[0].date = \"$DATE_NOW\" | 
               .apps[1].versions[0].size = $FILESIZE" repo.json > temp.json && mv temp.json repo.json
 
-      - name: Commit & Push
+      - name: Commit Changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "Auto-update MeloNX (Stable Config)" || echo "No changes"
+          git commit -m "Auto-update MeloNX while preserving history" || echo "No changes"
           git push

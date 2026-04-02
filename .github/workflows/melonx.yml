@@ -1,4 +1,4 @@
-- name: Update JSON Data (Force Multiple Versions)
+- name: Update MelonX (Force Multiple Versions)
         run: |
           VERSION="Build-$LATEST_ID"
           DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")

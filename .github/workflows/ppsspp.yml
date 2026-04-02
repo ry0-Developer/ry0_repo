@@ -1,0 +1,55 @@
+name: Update PPSSPP
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Fetch Latest PPSSPP
+        run: |
+          mkdir -p apps/emulators
+          API_URL="https://api.github.com/repos/hrydgard/ppsspp/releases/latest"
+          DOWNLOAD_URL=$(curl -s "$API_URL" | grep "browser_download_url.*\.ipa" | cut -d '"' -f 4 | head -n 1)
+          REAL_VERSION=$(curl -s "$API_URL" | jq -r '.tag_name' | sed 's/^v//')
+          
+          echo "Version: $REAL_VERSION"
+          curl -L "$DOWNLOAD_URL" -o apps/emulators/ppsspp.ipa
+          echo "$REAL_VERSION" > version.txt
+
+      - name: Upload to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload nightly apps/emulators/ppsspp.ipa --clobber || gh release create nightly apps/emulators/ppsspp.ipa --clobber
+
+      - name: Update JSON Data
+        run: |
+          REAL_VERSION=$(cat version.txt)
+          DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          FILESIZE=$(stat -c%s "apps/emulators/ppsspp.ipa" || echo "50000000")
+          
+          jq --arg version "$REAL_VERSION" \
+             --arg date "$DATE_NOW" \
+             --argjson size "$FILESIZE" \
+             '(.apps[] | select(.name == "PPSSPP")).versions[0] |= . + {version: $version, date: $date, size: $size}' repo.json > temp.json && mv temp.json repo.json
+
+      - name: Commit Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add repo.json
+          git commit -m "Auto-update PPSSPP to $REAL_VERSION" || echo "No changes"
+          git push

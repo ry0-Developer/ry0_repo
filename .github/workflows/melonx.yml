@@ -20,17 +20,9 @@ jobs:
 
       - name: Detect and Download Latest MeloNX
         run: |
-          # البحث عن أحدث رقم Package ID (Build Number)
           LATEST_ID=$(curl -s "https://git.ryujinx.app/melonx/emu/-/releases" | grep -oP 'package_files/\K[0-9]+' | sort -rn | head -n 1)
-          
-          # إذا فشل البحث، نستخدم رقم النسخة المستقرة التي أعطيتني إياها كاحتياط
-          if [ -z "$LATEST_ID" ]; then
-            LATEST_ID="1824"
-          fi
-          
+          if [ -z "$LATEST_ID" ]; then LATEST_ID="1824"; fi
           URL="https://git.ryujinx.app/melonx/emu/-/package_files/$LATEST_ID/download"
-          echo "Latest Build ID: $LATEST_ID"
-          
           curl -L "$URL" -o apps/emulators/melonx.ipa
 
       - name: Upload to GitHub Release
@@ -40,22 +32,22 @@ jobs:
           gh release create nightly --title "Nightly Builds" --notes "Auto-updated nightly builds" || echo "Release already exists"
           gh release upload nightly apps/emulators/melonx.ipa --clobber
 
-      - name: Update JSON Data
+      - name: Update JSON Data (Preserve Old Versions)
         run: |
-          # تحديث بيانات النسخة الأولى فقط (Latest) لتبقى النسخ القديمة كما هي
           VERSION="Build-$LATEST_ID"
           DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           FILESIZE=$(stat -c%s "apps/emulators/melonx.ipa")
           
-          # تحديث الإصدار، التاريخ، والحجم بدقة
-          jq ".apps[1].versions[0].version = \"$VERSION\"" repo.json > temp.json && mv temp.json repo.json
-          jq ".apps[1].versions[0].date = \"$DATE_NOW\"" repo.json > temp.json && mv temp.json repo.json
-          jq ".apps[1].versions[0].size = $FILESIZE" repo.json > temp.json && mv temp.json repo.json
+          # هذا الأمر يحدّث فقط العنصر رقم [0] في مصفوفة versions للتطبيق رقم [1] (MeloNX)
+          # ويترك العناصر [1] و [2] (النسخ القديمة) كما هي
+          jq ".apps[1].versions[0].version = \"$VERSION\" | 
+              .apps[1].versions[0].date = \"$DATE_NOW\" | 
+              .apps[1].versions[0].size = $FILESIZE" repo.json > temp.json && mv temp.json repo.json
 
       - name: Commit & Push Changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "Auto-update MeloNX to Build $LATEST_ID" || echo "No changes to commit"
+          git commit -m "Auto-update MeloNX to Build $LATEST_ID (Keeping older versions)" || echo "No changes"
           git push

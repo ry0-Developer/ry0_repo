@@ -1,6 +1,6 @@
 {
   "name": "ry0_",
-  "identifier": "com.ry0_.repo.stable.v2",
+  "identifier": "com.ry0_.repo.final.fixed",
   "sourceURL": "https://ry0-developer.github.io/ry0_repo/repo.json",
   "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/ry0_.jpg",
   "apps": [
@@ -15,13 +15,10 @@
       "category": "games",
       "versions": [
         {
-          "version": "2026.04.02.1152",
+          "version": "Latest Nightly",
           "date": "2026-04-02T00:00:00Z",
-          "localizedDescription": "Latest auto-compiled nightly build.",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/amethyst.ipa",
-          "size": 150357372,
-          "beta": true,
-          "minOSVersion": "14.0"
+          "size": 150357372
         }
       ],
       "appPermissions": {
@@ -38,18 +35,14 @@
           "com.apple.developer.kernel.increased-memory-limit",
           "com.apple.private.memorystatus",
           "local.sandboxed-jit"
-        ],
-        "privacy": {
-          "NSMicrophoneUsageDescription": "Amethyst uses the microphone to enable support for voice chat mods.",
-          "NSLocalNetworkUsageDescription": "Amethyst uses the local network to find and communicate with AltServer and LAN servers."
-        }
+        ]
       }
     },
     {
       "name": "MeloNX",
       "bundleIdentifier": "com.melonx.emu",
       "developerName": "MeloNX",
-      "localizedDescription": "Nintendo Switch emulator for iOS. Auto-updated.",
+      "localizedDescription": "Nintendo Switch emulator for iOS.",
       "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/melonx.png",
       "category": "emulators",
       "versions": [

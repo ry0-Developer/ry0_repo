@@ -55,8 +55,8 @@
       "category": "emulators",
       "versions": [
         {
-          "version": "2026.04.02.0617",
-          "date": "2026-04-02T00:00:00Z",
+          "version": "2026.04.02.0620",
+          "date": "2026-04-02T06:20:47Z",
           "localizedDescription": "Auto-updated Nightly Build",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
           "beta": true,

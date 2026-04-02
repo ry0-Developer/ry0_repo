@@ -1,49 +1,25 @@
-name: Update MeloNX
-
-on:
-  schedule:
-    - cron: "0 */12 * * *"
-  workflow_dispatch:
-
-jobs:
-  update:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write  
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Download and Verify
-        run: |
-          LATEST_ID=$(curl -s "https://git.ryujinx.app/melonx/emu/-/releases" | grep -oP 'package_files/\K[0-9]+' | sort -rn | head -n 1)
-          if [ -z "$LATEST_ID" ]; then LATEST_ID="1824"; fi
-          mkdir -p apps/emulators
-          curl -L "https://git.ryujinx.app/melonx/emu/-/package_files/$LATEST_ID/download" -o apps/emulators/melonx.ipa
-
-      - name: Upload to Nightly Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create nightly --title "Nightly Builds" --notes "Auto-updated assets" || echo "Release exists"
-          gh release upload nightly apps/emulators/melonx.ipa --clobber
-
-      - name: Inject Data into JSON
+- name: Update JSON Data (Force Multiple Versions)
         run: |
           VERSION="Build-$LATEST_ID"
           DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           FILESIZE=$(stat -c%s "apps/emulators/melonx.ipa")
           
-          # تعديل الفهرس [0] فقط للحفاظ على النسخ القديمة في المصفوفة
-          jq ".apps[1].versions[0].version = \"$VERSION\" | 
-              .apps[1].versions[0].date = \"$DATE_NOW\" | 
-              .apps[1].versions[0].size = $FILESIZE" repo.json > temp.json && mv temp.json repo.json
-
-      - name: Commit Changes
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add repo.json
-          git commit -m "Auto-update MeloNX while preserving history" || echo "No changes"
-          git push
+          # هنا بنجبر الروبوت يمسح مصفوفة النسخ القديمة المحيوسة ويكتب مصفوفة جديدة نظيفة فيها النسختين (الجديدة والقديمة) غصب
+          jq --arg version "$VERSION" \
+             --arg date "$DATE_NOW" \
+             --argjson size "$FILESIZE" \
+             '.apps[1].versions = [
+               {
+                 "version": $version,
+                 "date": $date,
+                 "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
+                 "size": $size
+               },
+               {
+                 "version": "Stable (Build 1593)",
+                 "date": "2025-12-15T00:00:00Z",
+                 "localizedDescription": "Previous stable build.",
+                 "downloadURL": "https://git.ryujinx.app/melonx/emu/-/package_files/1593/download",
+                 "size": 105000000
+               }
+             ]' repo.json > temp.json && mv temp.json repo.json

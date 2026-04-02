@@ -8,6 +8,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # This fixes the hidden upload error
 
     steps:
       - name: Checkout repo
@@ -38,8 +40,8 @@ jobs:
 
       - name: Commit & push
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Update Amethyst"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add apps/games/amethyst.ipa repo.json
+          git commit -m "Update Amethyst to $VERSION" || echo "No changes to commit"
           git push

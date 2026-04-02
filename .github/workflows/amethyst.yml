@@ -5,6 +5,10 @@ on:
     - cron: "0 */6 * * *"  # every 6 hours
   workflow_dispatch:
 
+# THIS FIXES THE NODE 20 WARNING
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -13,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4  # FIXED WARNING: Updated to v4
+        uses: actions/checkout@v4
 
       - name: Download Amethyst ZIP
         run: |
@@ -31,7 +35,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Create a 'nightly' release if it doesn't exist, then upload the big IPA file to it
           gh release create nightly --title "Nightly Builds" --notes "Auto-updated nightly builds" || echo "Release already exists"
           gh release upload nightly amethyst.ipa --clobber
 

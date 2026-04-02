@@ -1,8 +1,8 @@
- name: 🔄 Update ALL Apps
+name: Update ALL Apps
 
 on:
   schedule:
-    - cron: "0 */12 * * *" # المدير هو الذي سيعمل تلقائياً كل 12 ساعة
+    - cron: "0 */12 * * *"
   workflow_dispatch:
 
 jobs:
@@ -16,38 +16,38 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run Workflows Sequentially (Queue)
+      - name: Run Workflows Sequentially
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Starting update queue..."
-          gh workflow run amethyst.yml
+          gh workflow run amethyst.yml || true
           echo "Amethyst triggered. Waiting 120 seconds..."
           sleep 120
           
-          gh workflow run dolphinios.yml
+          gh workflow run dolphinios.yml || true
           echo "DolphiniOS triggered. Waiting 120 seconds..."
           sleep 120
           
-          gh workflow run getmoreram.yml
+          gh workflow run getmoreram.yml || true
           echo "GetMoreRam triggered. Waiting 120 seconds..."
           sleep 120
           
-          gh workflow run ipsx2.yml
+          gh workflow run ipsx2.yml || true
           echo "iPSX2 triggered. Waiting 120 seconds..."
           sleep 120
           
-          gh workflow run manic.yml
+          gh workflow run manic.yml || true
           echo "Manic triggered. Waiting 120 seconds..."
           sleep 120
           
-          gh workflow run melonx.yml
+          gh workflow run melonx.yml || true
           echo "MeloNX triggered. Waiting 120 seconds..."
           sleep 120
           
-          gh workflow run ppsspp.yml
+          gh workflow run ppsspp.yml || true
           echo "PPSSPP triggered. Waiting 120 seconds..."
           sleep 120
           
-          gh workflow run xenios.yml
+          gh workflow run xenios.yml || true
           echo "Xenios triggered! Queue completed."

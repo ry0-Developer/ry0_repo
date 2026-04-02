@@ -28,10 +28,10 @@
       "category": "emulators",
       "versions": [
         {
-          "version": "Latest Auto-Update",
-          "date": "2026-04-02T14:40:00Z",
+          "version": "Build-",
+          "date": "2026-04-02T11:49:15Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
-          "size": 110000000
+          "size": 94207474
         },
         {
           "version": "Stable (Build 1593)",

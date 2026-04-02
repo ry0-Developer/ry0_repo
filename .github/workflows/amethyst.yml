@@ -2,8 +2,11 @@ name: Update Amethyst
 
 on:
   schedule:
-    - cron: "0 */12 * * *"  # يعمل كل 12 ساعة
-  workflow_dispatch:        # زر التشغيل اليدوي
+    - cron: "0 */6 * * *"  # every 6 hours
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   update:
@@ -15,47 +18,34 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Prepare Folders
+      - name: Download Amethyst ZIP
         run: |
-          mkdir -p apps/games
+          curl -L "https://nightly.link/AngelAuraMC/Amethyst-iOS/workflows/development/main/org.angelauramc.amethyst-ios.ipa.zip" -o amethyst.zip
 
-      - name: Download Latest Amethyst
+      - name: Extract IPA
+        run: unzip amethyst.zip
+
+      - name: Rename IPA
         run: |
-          # البحث عن أحدث إصدار بصيغة ipa في مستودع Amethyst الرسمي
-          LATEST_IPA_URL=$(curl -s https://api.github.com/repos/Amethyst-iOS/amethyst/releases/latest | grep "browser_download_url.*\.ipa" | cut -d '"' -f 4 | head -n 1)
-          
-          # إذا كان لديك رابط تحميل مباشر آخر تعتمده لـ Amethyst، ضعه بين علامتي التنصيص في السطر التالي بدلاً من المتغير
-          if [ -z "$LATEST_IPA_URL" ]; then
-            echo "Error: Could not find latest Amethyst IPA. Please check the source URL."
-            exit 1
-          fi
-          
-          echo "Downloading Amethyst from: $LATEST_IPA_URL"
-          curl -L "$LATEST_IPA_URL" -o apps/games/amethyst.ipa
+          IPA=$(find . -name "*.ipa" | head -n 1)
+          mv "$IPA" amethyst.ipa
 
-      - name: Upload to Nightly Release
+      - name: Upload to GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # رفع الملف إلى قسم الريليس لضمان استقرار التحميل
-          gh release create nightly --title "Nightly Builds" --notes "Auto-updated assets" || echo "Release exists"
-          gh release upload nightly apps/games/amethyst.ipa --clobber
+          gh release create nightly --title "Nightly Builds" --notes "Auto-updated nightly builds" || echo "Release already exists"
+          gh release upload nightly amethyst.ipa --clobber
 
-      - name: Update JSON Data (Amethyst Only)
+      - name: Safely update JSON version
         run: |
-          VERSION=$(date +'%Y.%m.%d')
-          DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          FILESIZE=$(stat -c%s "apps/games/amethyst.ipa")
-          
-          # تعديل الفهرس [0] الخاص بـ Amethyst فقط لكي لا يخرب بيانات MeloNX
-          jq ".apps[0].versions[0].version = \"$VERSION\" | 
-              .apps[0].versions[0].date = \"$DATE_NOW\" | 
-              .apps[0].versions[0].size = $FILESIZE" repo.json > temp.json && mv temp.json repo.json
+          VERSION=$(date +'%Y.%m.%d.%H%M')
+          jq ".apps[0].versions[0].version = \"$VERSION\"" repo.json > temp.json && mv temp.json repo.json
 
-      - name: Commit Changes
+      - name: Commit & push JSON
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "Auto-update Amethyst" || echo "No changes"
+          git commit -m "Update Amethyst to $VERSION" || echo "No changes to commit"
           git push

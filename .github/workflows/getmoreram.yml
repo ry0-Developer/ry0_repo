@@ -19,9 +19,17 @@ jobs:
       - name: Fetch Latest GetMoreRam
         run: |
           mkdir -p apps/apps
-          API_URL="https://api.github.com/repos/hugeBlack/GetMoreRam/releases/latest"
+          
+          # مسحنا كلمة latest عشان نقدر نسحب النسخ الـ Pre-release
+          API_URL="https://api.github.com/repos/hugeBlack/GetMoreRam/releases"
+          
           DOWNLOAD_URL=$(curl -s "$API_URL" | grep "browser_download_url.*\.ipa" | cut -d '"' -f 4 | head -n 1)
-          REAL_VERSION=$(curl -s "$API_URL" | jq -r '.tag_name' | sed 's/^v//')
+          REAL_VERSION=$(curl -s "$API_URL" | jq -r '.[0].tag_name' | sed 's/^v//')
+          
+          # حماية إضافية للروبوت من الانهيار إذا كان الإصدار مجهول
+          if [ "$REAL_VERSION" == "null" ] || [ -z "$REAL_VERSION" ]; then
+             REAL_VERSION="1.0"
+          fi
           
           echo "Version: $REAL_VERSION"
           curl -L "$DOWNLOAD_URL" -o apps/apps/getmoreram.ipa
@@ -49,5 +57,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "Auto-update GetMoreRam to $REAL_VERSION" || echo "No changes"
+          git commit -m "Auto-update GetMoreRam to Version $REAL_VERSION" || echo "No changes"
           git push

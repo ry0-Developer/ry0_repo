@@ -5,7 +5,6 @@ on:
     - cron: "0 */12 * * *"
   workflow_dispatch:
 
-# هذا السطر بيسكت تحذير Node.js 20 للأبد
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -23,12 +22,9 @@ jobs:
         run: |
           mkdir -p apps/emulators
           
-          # إضافة || true تمنع الروبوت من الانهيار إذا كان موقع المطور معلق أو بطيء
+          # جلب رقم الـ ID للتحميل (مخفي للبرمجة)
           LATEST_ID=$(curl -s "https://git.ryujinx.app/melonx/emu/-/releases" | grep -oP 'package_files/\K[0-9]+' | sort -rn | head -n 1 || true)
-          
-          if [ -z "$LATEST_ID" ]; then 
-            LATEST_ID="1824"
-          fi
+          if [ -z "$LATEST_ID" ]; then LATEST_ID="1824"; fi
           
           curl -L "https://git.ryujinx.app/melonx/emu/-/package_files/$LATEST_ID/download" -o apps/emulators/melonx.ipa
 
@@ -39,15 +35,17 @@ jobs:
           gh release create nightly --title "Nightly Builds" --notes "Auto-updated nightly builds" || echo "Release exists"
           gh release upload nightly apps/emulators/melonx.ipa --clobber
 
-      - name: Update JSON Data
+      - name: Update JSON Data with Real Version
         run: |
-          VERSION="Build-$LATEST_ID"
-          DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          # هنا السحر! الروبوت يسحب رقم الإصدار الحقيقي (مثل 2.3.1) من صفحة المطور مباشرة
+          REAL_VERSION=$(curl -s "https://git.ryujinx.app/melonx/emu/-/releases" | grep -oP '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 || true)
+          if [ -z "$REAL_VERSION" ]; then REAL_VERSION="Latest"; fi
           
-          # حماية إضافية لحجم الملف في حال تأخر التحميل
+          DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           FILESIZE=$(stat -c%s "apps/emulators/melonx.ipa" || echo "110000000")
           
-          jq ".apps[1].versions[0].version = \"$VERSION\" | 
+          # الروبوت بيمسح الكلمة القديمة ويكتب الإصدار مثل 2.3.1
+          jq ".apps[1].versions[0].version = \"$REAL_VERSION\" | 
               .apps[1].versions[0].date = \"$DATE_NOW\" | 
               .apps[1].versions[0].size = $FILESIZE" repo.json > temp.json && mv temp.json repo.json
 
@@ -56,5 +54,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "Auto-update MeloNX to Build $LATEST_ID" || echo "No changes"
+          git commit -m "Auto-update MeloNX to Version $REAL_VERSION" || echo "No changes"
           git push

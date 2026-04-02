@@ -1,6 +1,6 @@
 {
   "name": "ry0_",
-  "identifier": "com.ry0_.repo.final.fix",
+  "identifier": "com.ry0_.repo.multiver",
   "sourceURL": "https://ry0-developer.github.io/ry0_repo/repo.json",
   "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/ry0_.jpg",
   "apps": [
@@ -8,55 +8,45 @@
       "name": "Amethyst",
       "bundleIdentifier": "org.angelauramc.amethyst",
       "developerName": "crystall1ne.dev",
-      "subtitle": "Bringing Minecraft: Java Edition to mobile devices.",
-      "localizedDescription": "Amethyst nightly build auto-updated via GitHub Actions.",
       "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Amethyst.png",
-      "tintColor": "#9649B8",
       "category": "games",
       "versions": [
         {
           "version": "auto",
           "date": "2026-04-02T00:00:00Z",
-          "localizedDescription": "Latest nightly build.",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/amethyst.ipa",
-          "size": 150357372,
-          "beta": true,
-          "minOSVersion": "14.0"
+          "size": 150357372
         }
-      ],
-      "appPermissions": {
-        "entitlements": [
-          "com.apple.private.security.container-required",
-          "get-task-allow",
-          "com.apple.developer.kernel.extended-virtual-addressing",
-          "com.apple.developer.kernel.increased-memory-limit",
-          "local.sandboxed-jit"
-        ]
-      }
+      ]
     },
     {
       "name": "MeloNX",
       "bundleIdentifier": "com.melonx.emu",
       "developerName": "MeloNX",
-      "localizedDescription": "Nintendo Switch emulator for iOS. Auto-updated nightly.",
+      "localizedDescription": "Nintendo Switch emulator for iOS. All versions available.",
       "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/melonx.png",
-      "tintColor": "#00D1C7",
       "category": "emulators",
       "versions": [
         {
-          "version": "auto",
-          "date": "2026-04-02T00:00:00Z",
-          "localizedDescription": "Auto-updated Nightly Build",
+          "version": "Latest (Build 1824)",
+          "date": "2026-04-02T10:00:00Z",
+          "localizedDescription": "Current nightly build.",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
-          "size": 100000000,
-          "beta": true,
-          "minOSVersion": "14.0"
+          "size": 110000000
+        },
+        {
+          "version": "Stable (Build 1593)",
+          "date": "2025-12-15T00:00:00Z",
+          "localizedDescription": "Previous stable build.",
+          "downloadURL": "https://git.ryujinx.app/melonx/emu/-/package_files/1593/download",
+          "size": 105000000
         }
       ],
       "appPermissions": {
         "entitlements": [
           "com.apple.developer.kernel.extended-virtual-addressing",
           "com.apple.developer.kernel.increased-memory-limit",
+          "get-task-allow",
           "local.sandboxed-jit"
         ]
       }

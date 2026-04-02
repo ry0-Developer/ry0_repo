@@ -1,8 +1,8 @@
 {
   "name": "ry0_",
-  "identifier": "com.ry0_.repo",
+  "identifier": "com.ry0_.repo2",
   "sourceURL": "https://ry0-developer.github.io/ry0_repo/repo.json",
-  "iconURL": "https://ry0-developer.github.io/ry0_repo/icons/ry0_.jpg",
+  "iconURL": "https://ry0-developer.github.io/ry0_repo/icons/ry0_.jpg?v=2",
   "apps": [
     {
       "name": "Amethyst",
@@ -15,7 +15,7 @@
       "category": "games",
       "versions": [
         {
-          "version": "2026.04.02.0612",
+          "version": "auto",
           "date": "2026-04-02T00:00:00Z",
           "localizedDescription": "Latest auto-compiled nightly build.",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/amethyst.ipa",
@@ -55,10 +55,11 @@
       "category": "emulators",
       "versions": [
         {
-          "version": "2026.04.02.0624",
-          "date": "2026-04-02T06:24:44Z",
+          "version": "auto",
+          "date": "2026-04-02T00:00:00Z",
           "localizedDescription": "Auto-updated Nightly Build",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
+          "size": 1000000,
           "beta": true,
           "minOSVersion": "14.0"
         }

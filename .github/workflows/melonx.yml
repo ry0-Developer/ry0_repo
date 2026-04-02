@@ -15,39 +15,36 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Prepare Folders
-        run: mkdir -p apps/emulators
-
-      - name: Detect and Download Latest MeloNX
+      - name: Download MeloNX
         run: |
           LATEST_ID=$(curl -s "https://git.ryujinx.app/melonx/emu/-/releases" | grep -oP 'package_files/\K[0-9]+' | sort -rn | head -n 1)
           if [ -z "$LATEST_ID" ]; then LATEST_ID="1824"; fi
           URL="https://git.ryujinx.app/melonx/emu/-/package_files/$LATEST_ID/download"
+          mkdir -p apps/emulators
           curl -L "$URL" -o apps/emulators/melonx.ipa
 
-      - name: Upload to GitHub Release
+      - name: Upload Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create nightly --title "Nightly Builds" --notes "Auto-updated nightly builds" || echo "Release already exists"
+          gh release create nightly --title "Nightly Builds" --notes "Auto-updated" || echo "Exists"
           gh release upload nightly apps/emulators/melonx.ipa --clobber
 
-      - name: Update JSON Data (Preserve Old Versions)
+      - name: Update JSON (Safely)
         run: |
           VERSION="Build-$LATEST_ID"
           DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           FILESIZE=$(stat -c%s "apps/emulators/melonx.ipa")
           
-          # هذا الأمر يحدّث فقط العنصر رقم [0] في مصفوفة versions للتطبيق رقم [1] (MeloNX)
-          # ويترك العناصر [1] و [2] (النسخ القديمة) كما هي
+          # تعديل الفهرس [0] فقط لعدم حذف النسخ القديمة
           jq ".apps[1].versions[0].version = \"$VERSION\" | 
               .apps[1].versions[0].date = \"$DATE_NOW\" | 
               .apps[1].versions[0].size = $FILESIZE" repo.json > temp.json && mv temp.json repo.json
 
-      - name: Commit & Push Changes
+      - name: Commit & Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "Auto-update MeloNX to Build $LATEST_ID (Keeping older versions)" || echo "No changes"
+          git commit -m "Auto-update MeloNX (Stable Config)" || echo "No changes"
           git push

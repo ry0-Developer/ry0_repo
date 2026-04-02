@@ -1,6 +1,6 @@
 {
   "name": "ry0_",
-  "identifier": "com.ry0_.repo.multiver",
+  "identifier": "com.ry0_.repo.stable.v1",
   "sourceURL": "https://ry0-developer.github.io/ry0_repo/repo.json",
   "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/ry0_.jpg",
   "apps": [
@@ -12,7 +12,7 @@
       "category": "games",
       "versions": [
         {
-          "version": "2026.04.02.1143",
+          "version": "Latest Nightly",
           "date": "2026-04-02T00:00:00Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/amethyst.ipa",
           "size": 150357372
@@ -23,16 +23,15 @@
       "name": "MeloNX",
       "bundleIdentifier": "com.melonx.emu",
       "developerName": "MeloNX",
-      "localizedDescription": "Nintendo Switch emulator for iOS. All versions available.",
+      "localizedDescription": "Nintendo Switch emulator for iOS. Auto-updated.",
       "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/melonx.png",
       "category": "emulators",
       "versions": [
         {
-          "version": "Build-",
-          "date": "2026-04-02T11:45:41Z",
-          "localizedDescription": "Current nightly build.",
+          "version": "Latest Auto-Update",
+          "date": "2026-04-02T14:40:00Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
-          "size": 94207474
+          "size": 110000000
         },
         {
           "version": "Stable (Build 1593)",

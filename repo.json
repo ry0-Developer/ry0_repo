@@ -218,10 +218,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "Latest",
-          "date": "2026-04-02T00:00:00Z",
+          "version": "Nightly-2026.04.03",
+          "date": "2026-04-03T13:12:03Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/livecontainer_nightly.ipa",
-          "size": 35000000
+          "size": 34254560
         }
       ],
       "appPermissions": {

@@ -10,7 +10,7 @@
       "developerName": "crystall1ne.dev",
       "subtitle": "Bringing Minecraft: Java Edition to mobile devices.",
       "localizedDescription": "Amethyst nightly build auto-updated via GitHub Actions. Includes JIT and memory entitlements.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Amethyst.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Amethyst-icon.png",
       "tintColor": "#9649B8",
       "category": "games",
       "versions": [
@@ -43,7 +43,7 @@
       "bundleIdentifier": "com.stossy11.MelonNX",
       "developerName": "MeloNX",
       "localizedDescription": "Nintendo Switch emulator for iOS. Auto-updated to the latest build.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/MeloNX.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/MeloNX-icon.png",
       "tintColor": "#f8566f",
       "category": "emulators",
       "versions": [
@@ -68,7 +68,7 @@
       "bundleIdentifier": "me.oatmealDome.DolphiniOS",
       "developerName": "OatmealDome",
       "localizedDescription": "GameCube and Wii emulator for iOS. (Pre-release/Nightly builds)",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/dolphinios.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/DolphiniOS-icon.png",
       "tintColor": "#007AFF",
       "category": "emulators",
       "versions": [
@@ -93,7 +93,7 @@
       "bundleIdentifier": "org.ppsspp.ppsspp",
       "developerName": "Henrik Rydgård",
       "localizedDescription": "PSP emulator for iOS.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/ppsspp.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",
       "category": "emulators",
       "versions": [
@@ -116,7 +116,7 @@
       "bundleIdentifier": "com.ipsx2.ios",
       "developerName": "otti83",
       "localizedDescription": "PlayStation 2 emulator for iOS.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/ipsx2.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/iPSX2-icon.png",
       "tintColor": "#1B1280",
       "category": "emulators",
       "versions": [
@@ -141,7 +141,7 @@
       "bundleIdentifier": "com.xenios.app",
       "developerName": "Xenios",
       "localizedDescription": "Xenios emulator port for iOS.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/xenios.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/XeniOS-icon.png",
       "tintColor": "#FF5733",
       "category": "emulators",
       "versions": [
@@ -164,7 +164,7 @@
       "bundleIdentifier": "com.manicemu.ios",
       "developerName": "Manic-EMU",
       "localizedDescription": "All-in-one retro game emulator for iOS. Packed with powerful features and a sleek UI.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/manic.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Manic-EMU-icon.png",
       "tintColor": "#FF2D55",
       "category": "emulators",
       "versions": [
@@ -189,7 +189,7 @@
       "bundleIdentifier": "com.kdt.livecontainer",
       "developerName": "khanhduytran0",
       "localizedDescription": "Stable release: LiveContainer bundled with SideStore. Run iOS apps without installing them seamlessly.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/livecontainer.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/LC-icon.png",
       "tintColor": "#000000",
       "category": "utilities",
       "versions": [
@@ -213,7 +213,7 @@
       "bundleIdentifier": "com.kdt.livecontainer.nightly",
       "developerName": "khanhduytran0",
       "localizedDescription": "Nightly release: Experience the absolute latest features and commits of LiveContainer bundled with SideStore.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/livecontainer.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/LC-icon.png",
       "tintColor": "#FF2D55",
       "category": "utilities",
       "versions": [
@@ -231,13 +231,13 @@
           "com.apple.private.security.container-required"
         ]
       }
-    }
+    },
     {
       "name": "GetMoreRam",
       "bundleIdentifier": "com.hugeblack.getmoreram",
       "developerName": "hugeBlack",
       "localizedDescription": "A utility app to clear and free up RAM on iOS devices.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/getmoreram.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Get-More-Ram-icon.png",
       "tintColor": "#000000",
       "category": "utilities",
       "versions": [

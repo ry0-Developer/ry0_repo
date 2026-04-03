@@ -73,10 +73,10 @@
       "category": "emulators",
       "versions": [
         {
-          "version": "Latest",
-          "date": "2026-04-02T00:00:00Z",
+          "version": "5.0.0b4",
+          "date": "2026-04-03T13:09:11Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/dolphinios.ipa",
-          "size": 100000000
+          "size": 17963622
         }
       ],
       "appPermissions": {

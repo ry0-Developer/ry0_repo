@@ -1,0 +1,54 @@
+name: Update LiveContainer Nightly
+
+on:
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Fetch Latest Nightly
+        run: |
+          mkdir -p apps/utilities
+          
+          DOWNLOAD_URL="https://github.com/LiveContainer/LiveContainer/releases/download/nightly/LiveContainer+SideStore.ipa"
+          # بما أن رابط النايتلي ثابت، بنخلي رقم الإصدار هو تاريخ التحديث عشان تعرف متى نزل
+          REAL_VERSION=$(date -u +"%Y.%m.%d")
+          
+          echo "Version: Nightly-$REAL_VERSION"
+          curl -L "$DOWNLOAD_URL" -o apps/utilities/livecontainer_nightly.ipa
+          echo "Nightly-$REAL_VERSION" > version.txt
+
+      - name: Upload to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload nightly apps/utilities/livecontainer_nightly.ipa --clobber || gh release create nightly apps/utilities/livecontainer_nightly.ipa --clobber
+
+      - name: Update JSON Data
+        run: |
+          REAL_VERSION=$(cat version.txt)
+          DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          FILESIZE=$(stat -c%s "apps/utilities/livecontainer_nightly.ipa" || echo "35000000")
+          
+          jq --arg version "$REAL_VERSION" \
+             --arg date "$DATE_NOW" \
+             --argjson size "$FILESIZE" \
+             '(.apps[] | select(.name == "LiveContainer (Nightly)")).versions[0] |= . + {version: $version, date: $date, size: $size}' repo.json > temp.json && mv temp.json repo.json
+
+      - name: Commit Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add repo.json
+          git commit -m "Auto-update LiveContainer Nightly to $REAL_VERSION" || echo "No changes"
+          git push

@@ -185,6 +185,54 @@
       }
     },
     {
+      "name": "LiveContainer (Stable)",
+      "bundleIdentifier": "com.kdt.livecontainer",
+      "developerName": "khanhduytran0",
+      "localizedDescription": "Stable release: LiveContainer bundled with SideStore. Run iOS apps without installing them seamlessly.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/livecontainer.png",
+      "tintColor": "#000000",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "Latest",
+          "date": "2026-04-02T00:00:00Z",
+          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/livecontainer_stable.ipa",
+          "size": 35000000
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "get-task-allow",
+          "com.apple.private.security.no-sandbox",
+          "com.apple.private.security.container-required"
+        ]
+      }
+    },
+    {
+      "name": "LiveContainer (Nightly)",
+      "bundleIdentifier": "com.kdt.livecontainer.nightly",
+      "developerName": "khanhduytran0",
+      "localizedDescription": "Nightly release: Experience the absolute latest features and commits of LiveContainer bundled with SideStore.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/livecontainer.png",
+      "tintColor": "#FF2D55",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "Latest",
+          "date": "2026-04-02T00:00:00Z",
+          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/livecontainer_nightly.ipa",
+          "size": 35000000
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "get-task-allow",
+          "com.apple.private.security.no-sandbox",
+          "com.apple.private.security.container-required"
+        ]
+      }
+    }
+    {
       "name": "GetMoreRam",
       "bundleIdentifier": "com.hugeblack.getmoreram",
       "developerName": "hugeBlack",

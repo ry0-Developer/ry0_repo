@@ -51,3 +51,10 @@ jobs:
           
           gh workflow run xenios.yml || true
           echo "Xenios triggered! Queue completed."
+
+          gh workflow run livecontainer_stable.yml || true
+          echo "LiveContainer Stable triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run livecontainer_nightly.yml || true
+          echo "LiveContainer Nightly triggered! Queue completed."

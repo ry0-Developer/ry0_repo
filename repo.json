@@ -64,19 +64,19 @@
       }
     },
     {
-      "name": "DolphiniOS",
+      "name": "DolphiniOS (nightly)",
       "bundleIdentifier": "me.oatmealDome.DolphiniOS",
       "developerName": "OatmealDome",
-      "localizedDescription": "GameCube and Wii emulator for iOS.",
+      "localizedDescription": "GameCube and Wii emulator for iOS. (Pre-release/Nightly builds)",
       "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/dolphinios.png",
       "tintColor": "#007AFF",
       "category": "emulators",
       "versions": [
         {
-          "version": "3.2.1",
-          "date": "2026-04-03T01:48:22Z",
+          "version": "Latest",
+          "date": "2026-04-02T00:00:00Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/dolphinios.ipa",
-          "size": 80254375
+          "size": 100000000
         }
       ],
       "appPermissions": {

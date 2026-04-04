@@ -219,9 +219,9 @@
       "versions": [
         {
           "version": "Nightly-2026.04.04",
-          "date": "2026-04-04T01:43:48Z",
+          "date": "2026-04-04T12:54:28Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/livecontainer_nightly.ipa",
-          "size": 34254560
+          "size": 34540268
         }
       ],
       "appPermissions": {

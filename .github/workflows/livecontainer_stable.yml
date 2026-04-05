@@ -20,15 +20,19 @@ jobs:
         run: |
           mkdir -p apps/utilities
           
+          # جلب رقم الإصدار فقط عشان نكتبه في المتجر
           API_URL="https://api.github.com/repos/LiveContainer/LiveContainer/releases/latest"
-          DOWNLOAD_URL=$(curl -s "$API_URL" | grep "browser_download_url.*LiveContainer+SideStore\.ipa" | cut -d '"' -f 4 | head -n 1)
           REAL_VERSION=$(curl -s "$API_URL" | jq -r '.tag_name' | sed 's/^v//')
           
           if [ "$REAL_VERSION" == "null" ] || [ -z "$REAL_VERSION" ]; then
             REAL_VERSION="Stable"
           fi
-          
           echo "Version: $REAL_VERSION"
+
+          # استخدام الرابط المباشر والثابت اللي أرسلته
+          DOWNLOAD_URL="https://github.com/LiveContainer/LiveContainer/releases/latest/download/LiveContainer+SideStore.ipa"
+          
+          echo "Downloading from direct link..."
           curl -L "$DOWNLOAD_URL" -o apps/utilities/livecontainer_stable.ipa
           echo "$REAL_VERSION" > version.txt
 

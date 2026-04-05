@@ -194,10 +194,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "Latest",
-          "date": "2026-04-02T00:00:00Z",
+          "version": "3.7.2",
+          "date": "2026-04-05T21:16:26Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/livecontainer_stable.ipa",
-          "size": 35000000
+          "size": 34811049
         }
       ],
       "appPermissions": {

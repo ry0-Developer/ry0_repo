@@ -185,9 +185,9 @@
       }
     },
     {
-      "name": "LiveContainer (Stable)",
+      "name": "LiveContainer+ SideStore (Stable)",
       "bundleIdentifier": "com.kdt.livecontainer",
-      "developerName": "khanhduytran0",
+      "developerName": "(Stable)",
       "localizedDescription": "Stable release: LiveContainer bundled with SideStore. Run iOS apps without installing them seamlessly.",
       "iconURL": "https://github.com/ry0-Developer/ry0_repo/blob/main/icons/LC-icon.png",
       "tintColor": "#000000",
@@ -209,9 +209,9 @@
       }
     },
     {
-      "name": "LiveContainer (Nightly)",
+      "name": "LiveContainer + SideStore (Nightly)",
       "bundleIdentifier": "com.kdt.livecontainer.nightly",
-      "developerName": "khanhduytran0",
+      "developerName": "(Nightly)",
       "localizedDescription": "Nightly release: Experience the absolute latest features and commits of LiveContainer bundled with SideStore.",
       "iconURL": "https://github.com/ry0-Developer/ry0_repo/blob/main/icons/LC-icon.png",
       "tintColor": "#FF2D55",

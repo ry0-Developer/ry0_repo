@@ -189,7 +189,7 @@
       "bundleIdentifier": "com.kdt.livecontainer",
       "developerName": "khanhduytran0",
       "localizedDescription": "Stable release: LiveContainer bundled with SideStore. Run iOS apps without installing them seamlessly.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/LC-icon.png",
+      "iconURL": "https://github.com/ry0-Developer/ry0_repo/blob/main/icons/LC-icon.png",
       "tintColor": "#000000",
       "category": "utilities",
       "versions": [
@@ -213,7 +213,7 @@
       "bundleIdentifier": "com.kdt.livecontainer.nightly",
       "developerName": "khanhduytran0",
       "localizedDescription": "Nightly release: Experience the absolute latest features and commits of LiveContainer bundled with SideStore.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/LC-icon.png",
+      "iconURL": "https://github.com/ry0-Developer/ry0_repo/blob/main/icons/LC-icon.png",
       "tintColor": "#FF2D55",
       "category": "utilities",
       "versions": [

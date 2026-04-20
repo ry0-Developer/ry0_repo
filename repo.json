@@ -48,10 +48,10 @@
       "category": "emulators",
       "versions": [
         {
-          "version": "MeloNX",
-          "date": "2026-04-19T12:53:38Z",
+          "version": "login",
+          "date": "2026-04-20T02:10:48Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
-          "size": 102519
+          "size": 26440
         }
       ],
       "appPermissions": {

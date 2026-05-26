@@ -121,10 +121,10 @@
       "category": "emulators",
       "versions": [
         {
-          "version": "0.1.2",
-          "date": "2026-05-25T14:46:16Z",
+          "version": "0.2.0dev",
+          "date": "2026-05-26T02:39:31Z",
           "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/ipsx2.ipa",
-          "size": 11165736
+          "size": 11172808
         }
       ],
       "appPermissions": {

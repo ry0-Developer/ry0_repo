@@ -63,18 +63,29 @@ jobs:
           apps_to_add = []
           
           if "External Repo" in source_type:
-              try:
-                  # استخدام خدمة بروكسي لتخطي حظر الـ IP حق قيت هب
-                  proxy_url = f"https://api.allorigins.win/raw?url={source_url}"
-                  
-                  headers = {
-                      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
-                  }
-                  req = requests.get(proxy_url, headers=headers, timeout=20)
-                  req.raise_for_status()
-                  ext_data = req.json()
-              except Exception as e:
-                  print(f"Error fetching or parsing JSON from {source_url} via proxy: {e}")
+              # قائمة بالوسطاء (البروكسيات) لمحاربة Cloudflare
+              urls_to_try = [
+                  source_url, # المحاولة المباشرة
+                  f"https://corsproxy.io/?{source_url}", # بروكسي تخطي الكلاودفلير
+                  f"https://api.codetabs.com/v1/proxy?quest={source_url}" # بروكسي احتياطي
+              ]
+              
+              headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
+              
+              ext_data = None
+              for url in urls_to_try:
+                  try:
+                      print(f"🚀 Trying to fetch from: {url}")
+                      req = requests.get(url, headers=headers, timeout=15)
+                      req.raise_for_status()
+                      ext_data = req.json()
+                      print("✅ Success!")
+                      break # إذا نجح، يوقف بحث ويكمل
+                  except Exception as e:
+                      print(f"❌ Failed: {e}")
+              
+              if not ext_data:
+                  print("\n🚨 Error: Could not fetch JSON from any source. The site's Cloudflare protection is completely blocking automated access.")
                   exit(1)
 
               ext_apps = ext_data.get('apps', [])
@@ -141,10 +152,18 @@ jobs:
                 contents: write
               steps:
                 - uses: actions/checkout@v4
-                - name: Sync App (Via Proxy)
+                - name: Sync App (Fallback Proxies)
                   run: |
-                    # التحديث أيضاً يستخدم البروكسي لتفادي الحظر مستقبلاً
-                    curl -s -L "https://api.allorigins.win/raw?url={source_url}" > ext.json
+                    # المحاولة عبر عدة بروكسيات حتى ينجح
+                    curl -s -f -H "User-Agent: Mozilla/5.0" "{source_url}" > ext.json || \\
+                    curl -s -f -L "https://corsproxy.io/?{source_url}" > ext.json || \\
+                    curl -s -f -L "https://api.codetabs.com/v1/proxy?quest={source_url}" > ext.json
+                    
+                    if [ ! -s ext.json ]; then
+                      echo "Failed to fetch JSON"
+                      exit 1
+                    fi
+                    
                     VERSION=$(jq -r '.apps[] | select(.name == "{ext_target}") | .versions[0].version' ext.json)
                     URL=$(jq -r '.apps[] | select(.name == "{ext_target}") | .versions[0].downloadURL' ext.json)
                     SIZE=$(jq -r '.apps[] | select(.name == "{ext_target}") | .versions[0].size' ext.json)
@@ -173,5 +192,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json icons/ .github/workflows/
-          git commit -m "🤖 Dashboard: Processed apps successfully via Proxy" || echo "No changes"
+          git commit -m "🤖 Dashboard: Processed apps using Multi-Proxy Bypass" || echo "No changes"
           git push

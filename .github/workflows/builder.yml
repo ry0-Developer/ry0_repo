@@ -62,6 +62,11 @@ jobs:
           local_name_input = os.environ.get('INPUT_LOCAL_NAME', '')
           repo_name = os.environ.get('REPO_NAME', '')
 
+          # 🚀 خدعة فصل الأقواس عشان قيت هب ما يعلق
+          pat_secret = "$" + "{{ secrets.PAT }}"
+          gh_repo = "$" + "{{ github.repository }}"
+          gh_token = "$" + "{{ secrets.GITHUB_TOKEN }}"
+
           apps_to_add = []
           
           if "External Repo" in source_type:
@@ -125,6 +130,7 @@ jobs:
               repo_data['apps'].append(app)
               
               wf_path = f".github/workflows/sync_{safe_name}.yml"
+              
               if "External Repo" in source_type:
                   ext_target = app_name if "ALL Apps" in source_type or "Latest" in source_type else external_name
                   workflow_content = f"""name: Update {app_name}
@@ -141,7 +147,7 @@ jobs:
               steps:
                 - uses: actions/checkout@v4
                   with:
-                    token: ${{{{ secrets.PAT }}}}
+                    token: {pat_secret}
                 - name: Setup Python
                   uses: actions/setup-python@v5
                   with:
@@ -179,8 +185,48 @@ jobs:
                       git push
                     fi
           """
-                  with open(wf_path, 'w') as f:
-                      f.write(workflow_content)
+              else:
+                  repo_path = source_url.replace('https://github.com/', '').strip('/')
+                  workflow_content = f"""name: Update {app_name}
+          on:
+            workflow_dispatch:
+            schedule:
+              - cron: '0 0 * * *'
+          jobs:
+            update:
+              runs-on: ubuntu-latest
+              permissions:
+                contents: write
+              steps:
+                - uses: actions/checkout@v4
+                  with:
+                    token: {pat_secret}
+                - name: Fetch & Update
+                  env:
+                    GITHUB_TOKEN: {gh_token}
+                  run: |
+                    mkdir -p apps/utilities
+                    API_URL="https://api.github.com/repos/{repo_path}/releases/latest"
+                    DOWNLOAD_URL=\$(curl -s "\$API_URL" | jq -r '.assets[].browser_download_url' | grep -i "\\.ipa\$" | head -n 1)
+                    VERSION=\$(curl -s "\$API_URL" | jq -r '.tag_name' | sed 's/^v//')
+                    curl -L "\$DOWNLOAD_URL" -o apps/utilities/{safe_name}.ipa
+                    gh release upload nightly apps/utilities/{safe_name}.ipa --clobber || gh release create nightly apps/utilities/{safe_name}.ipa --clobber
+                    
+                    DATE_NOW=\$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+                    FILESIZE=\$(stat -c%s "apps/utilities/{safe_name}.ipa" || echo "35000000")
+                    URL="https://github.com/{gh_repo}/releases/download/nightly/{safe_name}.ipa"
+                    
+                    jq --arg app "{app_name}" --arg v "\$VERSION" --arg u "\$URL" --arg d "\$DATE_NOW" --argjson s "\$FILESIZE" \\
+                    '(.apps[] | select(.name == \$app)).versions[0] |= . + {{version: \$v, date: \$d, downloadURL: \$u, size: \$s}}' repo.json > tmp.json && mv tmp.json repo.json
+                    git config user.name "github-actions[bot]"
+                    git config user.email "github-actions[bot]@users.noreply.github.com"
+                    git add repo.json
+                    git commit -m "Update {app_name} to \$VERSION" || echo "No changes"
+                    git push
+          """
+                  
+              with open(wf_path, 'w') as f:
+                  f.write(workflow_content)
 
           with open('repo.json', 'w') as f:
               json.dump(repo_data, f, indent=2)
@@ -192,5 +238,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json icons/ .github/workflows/
-          git commit -m "🤖 Dashboard: Processed apps using Cloudscraper" || echo "No changes"
+          git commit -m "🤖 Dashboard: Processed apps successfully" || echo "No changes"
           git push

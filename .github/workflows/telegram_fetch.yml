@@ -1,0 +1,114 @@
+name: Telegram IPA Fetcher
+
+on:
+  workflow_dispatch:
+    inputs:
+      channel_username:
+        description: 'Telegram Channel Username (e.g., tubevault)'
+        required: true
+        default: 'tubevault'
+      app_name:
+        description: 'App Name for your Repo (e.g., YouTube)'
+        required: true
+        default: 'YouTube Mod'
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-from-telegram:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install telethon cryptg
+
+      - name: Fetch IPA from Telegram
+        env:
+          TG_API_ID: ${{ secrets.TG_API_ID }}
+          TG_API_HASH: ${{ secrets.TG_API_HASH }}
+          TG_SESSION: ${{ secrets.TG_SESSION }}
+          CHANNEL: ${{ github.event.inputs.channel_username }}
+        run: |
+          cat << 'EOF' > fetch_tg.py
+          import os, asyncio, json, datetime
+          from telethon.sync import TelegramClient
+          from telethon.sessions import StringSession
+
+          api_id = int(os.environ.get('TG_API_ID'))
+          api_hash = os.environ.get('TG_API_HASH')
+          session_str = os.environ.get('TG_SESSION')
+          channel = os.environ.get('CHANNEL')
+
+          async def main():
+              client = TelegramClient(StringSession(session_str), api_id, api_hash)
+              await client.connect()
+              
+              print(f"🔍 Searching for latest IPA in @{channel}...")
+              
+              # جلب آخر 20 رسالة للبحث عن ملف IPA
+              messages = await client.get_messages(channel, limit=20)
+              downloaded_file = None
+              
+              for msg in messages:
+                  if msg.document and msg.file.name and msg.file.name.lower().endswith('.ipa'):
+                      print(f"📥 Found: {msg.file.name}. Downloading now (this may take a minute)...")
+                      downloaded_file = await client.download_media(msg, file=msg.file.name)
+                      print("✅ Download Complete!")
+                      break
+              
+              await client.disconnect()
+              
+              if downloaded_file:
+                  # حفظ اسم الملف عشان نستخدمه في الخطوات الجاية
+                  with open('file_info.env', 'w') as f:
+                      f.write(f"IPA_FILE={downloaded_file}\n")
+              else:
+                  print("❌ No IPA files found in recent messages.")
+                  exit(1)
+
+          asyncio.run(main())
+          EOF
+          python fetch_tg.py
+
+      - name: Upload to GitHub Releases
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          source file_info.env
+          echo "Uploading $IPA_FILE to Releases..."
+          gh release upload nightly "$IPA_FILE" --clobber || gh release create nightly "$IPA_FILE" --clobber
+
+      - name: Update repo.json
+        env:
+          APP_NAME: ${{ github.event.inputs.app_name }}
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          source file_info.env
+          DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          FILESIZE=$(stat -c%s "$IPA_FILE")
+          # تنظيف اسم الملف للرابط
+          SAFE_FILENAME=$(basename "$IPA_FILE" | tr ' ' '.')
+          URL="https://github.com/$REPO_NAME/releases/download/nightly/$SAFE_FILENAME"
+          
+          # استخراج إصدار عشوائي أو تاريخ اليوم كإصدار
+          VERSION=$(date +"%Y.%m.%d")
+          
+          # تحديث ملف JSON
+          jq --arg app "$APP_NAME" --arg v "$VERSION" --arg u "$URL" --arg d "$DATE_NOW" --argjson s "$FILESIZE" \
+          '(.apps[] | select(.name == $app)).versions[0] |= . + {version: $v, date: $d, downloadURL: $u, size: $s}' repo.json > tmp.json && mv tmp.json repo.json
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add repo.json
+          git commit -m "📲 Uploaded $APP_NAME from Telegram" || echo "No changes"
+          git push

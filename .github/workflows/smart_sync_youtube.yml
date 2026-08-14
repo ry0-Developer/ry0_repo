@@ -2,8 +2,8 @@ name: Smart Sync YouTube & YT Music
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs automatically every day at 00:00 UTC
-  workflow_dispatch:      # Allows manual trigger anytime from the Actions tab
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -27,25 +27,25 @@ jobs:
 
       - name: Fetch & Select Latest Builds
         run: |
-          python -c "
+          cat << 'EOF' > smart_sync.py
           import json, cloudscraper
           from datetime import datetime
 
           SOURCE_URL = 'https://repo.ballermc.com/repo.json'
 
-          # 1. Fetch Upstream Repo
+          print("🚀 Firing up Cloudscraper to fetch upstream...")
           scraper = cloudscraper.create_scraper(browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False})
           try:
               resp = scraper.get(SOURCE_URL, timeout=30)
               resp.raise_for_status()
               ext_data = resp.json()
+              print("✅ Successfully fetched source repo!")
           except Exception as e:
-              print(f'Error fetching upstream repository: {e}')
+              print(f"Error fetching upstream repository: {e}")
               exit(1)
 
           ext_apps = ext_data.get('apps', [])
 
-          # 2. Date parsing helper
           def get_app_date(app):
               try:
                   date_str = app.get('versions', [{}])[0].get('date', '1970-01-01T00:00:00Z')
@@ -53,7 +53,6 @@ jobs:
               except Exception:
                   return datetime.min
 
-          # 3. Categorize Apps
           yt_music_candidates = []
           yt_main_candidates = []
 
@@ -66,28 +65,23 @@ jobs:
               elif 'youtube' in name or 'yt' in name or 'google.ios.youtube' in bundle:
                   yt_main_candidates.append(app)
 
-          # 4. Pick the latest updated build for each
           best_yt_music = max(yt_music_candidates, key=get_app_date) if yt_music_candidates else None
           best_yt_main = max(yt_main_candidates, key=get_app_date) if yt_main_candidates else None
 
-          # 5. Load your local repo.json
           with open('repo.json', 'r') as f:
               repo_data = json.load(f)
 
           local_apps = repo_data.get('apps', [])
 
-          # Helper to replace or update targeted app categories
           def update_or_replace_app(new_app, is_music=False):
-              nonlocal local_apps
+              global local_apps # 🛠️ تم حل الخطأ هنا (استخدام global بدل nonlocal)
               if not new_app:
                   return
 
-              # Clean formatting: Ensure category exists and permissions are valid
               new_app['category'] = 'entertainment'
               if 'appPermissions' in new_app and not new_app['appPermissions']:
                   del new_app['appPermissions']
 
-              # Remove previous YouTube/YT Music entries to keep repo clean
               def is_match(a):
                   a_name = a.get('name', '').lower()
                   a_bundle = a.get('bundleIdentifier', '').lower()
@@ -100,18 +94,19 @@ jobs:
               local_apps.append(new_app)
 
           if best_yt_main:
-              print(f'Selected Latest YouTube: {best_yt_main[\"name\"]} (Version: {best_yt_main[\"versions\"][0][\"version\"]})')
+              print(f"🎯 Selected Latest YouTube: {best_yt_main['name']} (Version: {best_yt_main['versions'][0]['version']})")
               update_or_replace_app(best_yt_main, is_music=False)
 
           if best_yt_music:
-              print(f'Selected Latest YouTube Music: {best_yt_music[\"name\"]} (Version: {best_yt_music[\"versions\"][0][\"version\"]})')
+              print(f"🎵 Selected Latest YouTube Music: {best_yt_music['name']} (Version: {best_yt_music['versions'][0]['version']})")
               update_or_replace_app(best_yt_music, is_music=True)
 
           repo_data['apps'] = local_apps
 
           with open('repo.json', 'w') as f:
               json.dump(repo_data, f, indent=2)
-          "
+          EOF
+          python smart_sync.py
 
       - name: Commit and Push Changes
         run: |

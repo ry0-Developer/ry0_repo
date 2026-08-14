@@ -1,0 +1,207 @@
+name: App Builder Bot 👷‍♂️
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  build-app:
+    if: contains(github.event.issue.labels.*.name, 'auto-add')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Parse Issue and Build Everything
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          cat << 'EOF' > builder.py
+          import os, re, json, requests
+
+          body = os.environ.get('ISSUE_BODY', '')
+          repo_name = os.environ.get('REPO_NAME', '')
+
+          def parse_field(label):
+              pattern = rf'### {label}\s*\n+(.*?)(?=\n### |$)'
+              match = re.search(pattern, body, re.DOTALL | re.IGNORECASE)
+              if match:
+                  val = match.group(1).strip()
+                  return val if val and val != '_No response_' else None
+              return None
+
+          local_name = parse_field('Local App Name')
+          source_type = parse_field('Source Type')
+          source_url = parse_field('Source URL')
+          external_name = parse_field('Target App Name.*')
+          icon_text = parse_field('App Icon')
+          bundle_id = parse_field('Bundle Identifier')
+          developer = parse_field('Developer Name')
+          description = parse_field('Description')
+          category = parse_field('Category')
+
+          if not local_name:
+              print("Error: Local App Name missing.")
+              exit(1)
+
+          safe_name = re.sub(r'[^a-zA-Z0-9]', '', local_name).lower()
+          new_app = {}
+
+          # 1. Fetch data
+          if "Another Repo" in source_type:
+              req = requests.get(source_url)
+              ext_data = req.json()
+              ext_app = next((a for a in ext_data.get('apps', []) if a['name'] == external_name), None)
+              if ext_app:
+                  new_app = ext_app.copy()
+                  new_app['name'] = local_name
+              else:
+                  print(f"Error: {external_name} not found in {source_url}")
+                  exit(1)
+          else:
+              new_app = {
+                  "name": local_name,
+                  "bundleIdentifier": bundle_id or "com.custom.app",
+                  "developerName": developer or "Unknown",
+                  "localizedDescription": description or "Added via Dashboard",
+                  "category": category or "utilities",
+                  "versions": [{"version": "1.0", "date": "2026-08-14T00:00:00Z", "downloadURL": "TBD", "size": 0}]
+              }
+
+          # 2. Handle Icon (Drag & Drop extraction)
+          icon_url = None
+          if icon_text:
+              url_match = re.search(r'(https?://[^\s)]+)', icon_text)
+              if url_match:
+                  icon_url = url_match.group(1)
+
+          if icon_url:
+              try:
+                  os.makedirs('icons', exist_ok=True)
+                  icon_path = f"icons/{safe_name}.png"
+                  with open(icon_path, 'wb') as f:
+                      f.write(requests.get(icon_url).content)
+                  new_app['iconURL'] = f"https://raw.githubusercontent.com/{repo_name}/main/{icon_path}"
+              except Exception as e:
+                  print("Icon download failed")
+
+          # 3. Update repo.json
+          with open('repo.json', 'r') as f:
+              repo_data = json.load(f)
+
+          # Remove if exists to update
+          repo_data['apps'] = [app for app in repo_data['apps'] if app['name'] != local_name]
+          repo_data['apps'].append(new_app)
+
+          with open('repo.json', 'w') as f:
+              json.dump(repo_data, f, indent=2)
+
+          # 4. Generate the proper Workflow
+          os.makedirs('.github/workflows', exist_ok=True)
+          wf_path = f".github/workflows/sync_{safe_name}.yml"
+
+          if "Another Repo" in source_type:
+              workflow_content = f"""name: Sync {local_name}
+          on:
+            workflow_dispatch:
+
+          jobs:
+            sync:
+              runs-on: ubuntu-latest
+              permissions:
+                contents: write
+              steps:
+                - uses: actions/checkout@v4
+                - name: Sync App
+                  run: |
+                    curl -s "{source_url}" > ext.json
+                    VERSION=$(jq -r '.apps[] | select(.name == "{external_name}") | .versions[0].version' ext.json)
+                    URL=$(jq -r '.apps[] | select(.name == "{external_name}") | .versions[0].downloadURL' ext.json)
+                    SIZE=$(jq -r '.apps[] | select(.name == "{external_name}") | .versions[0].size' ext.json)
+                    DATE=$(jq -r '.apps[] | select(.name == "{external_name}") | .versions[0].date' ext.json)
+                    
+                    jq --arg app "{local_name}" --arg v "$VERSION" --arg u "$URL" --arg d "$DATE" --argjson s "$SIZE" \\
+                    '(.apps[] | select(.name == $app)).versions[0] |= . + {{version: $v, date: $d, downloadURL: $u, size: $s}}' repo.json > tmp.json && mv tmp.json repo.json
+                    
+                    git config user.name "github-actions[bot]"
+                    git config user.email "github-actions[bot]@users.noreply.github.com"
+                    git add repo.json
+                    git commit -m "Auto-sync {local_name} to $VERSION" || echo "No changes"
+                    git push
+          """
+          else:
+              repo_path = source_url.replace('https://github.com/', '').strip('/')
+              workflow_content = f"""name: Update {local_name}
+          on:
+            workflow_dispatch:
+
+          jobs:
+            update:
+              runs-on: ubuntu-latest
+              permissions:
+                contents: write
+              steps:
+                - uses: actions/checkout@v4
+                - name: Fetch Release
+                  run: |
+                    mkdir -p apps/utilities
+                    API_URL="https://api.github.com/repos/{repo_path}/releases/latest"
+                    DOWNLOAD_URL=$(curl -s "$API_URL" | jq -r '.assets[].browser_download_url' | grep -i "\\.ipa$" | head -n 1)
+                    curl -L "$DOWNLOAD_URL" -o apps/utilities/{safe_name}.ipa
+                    
+                - name: Upload Release
+                  env:
+                    GITHUB_TOKEN: ${{{{ secrets.GITHUB_TOKEN }}}}
+                  run: |
+                    gh release upload nightly apps/utilities/{safe_name}.ipa --clobber || gh release create nightly apps/utilities/{safe_name}.ipa --clobber
+                    
+                - name: Update JSON
+                  run: |
+                    API_URL="https://api.github.com/repos/{repo_path}/releases/latest"
+                    VERSION=$(curl -s "$API_URL" | jq -r '.tag_name' | sed 's/^v//')
+                    DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+                    FILESIZE=$(stat -c%s "apps/utilities/{safe_name}.ipa" || echo "35000000")
+                    URL="https://github.com/${{{{ github.repository }}}}/releases/download/nightly/{safe_name}.ipa"
+                    
+                    jq --arg app "{local_name}" --arg v "$VERSION" --arg u "$URL" --arg d "$DATE_NOW" --argjson s "$FILESIZE" \\
+                    '(.apps[] | select(.name == $app)).versions[0] |= . + {{version: $v, date: $d, downloadURL: $u, size: $s}}' repo.json > tmp.json && mv tmp.json repo.json
+                    
+                    git config user.name "github-actions[bot]"
+                    git config user.email "github-actions[bot]@users.noreply.github.com"
+                    git add repo.json
+                    git commit -m "Update {local_name} to $VERSION" || echo "No changes"
+                    git push
+          """
+          
+          with open(wf_path, 'w') as f:
+              f.write(workflow_content)
+          EOF
+          python builder.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add repo.json icons/ .github/workflows/
+          git commit -m "🤖 Dashboard: Added new app via Issue #${{ github.event.issue.number }}" || echo "No changes"
+          git push
+
+      - name: Close Issue and Comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --body "✅ **تمت الإضافة بنجاح يا مدير!** تم تحديث ملف المتجر وصناعة روبوت التحديث التلقائي الخاص بالتطبيق."
+          gh issue close ${{ github.event.issue.number }}

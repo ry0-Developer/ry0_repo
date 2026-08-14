@@ -41,7 +41,8 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install requests
+        # 🚀 ضفنا مكتبة cloudscraper المتخصصة بتخطي الحماية
+        run: pip install requests cloudscraper
 
       - name: Process Inputs and Build Repo
         env:
@@ -52,7 +53,7 @@ jobs:
           REPO_NAME: ${{ github.repository }}
         run: |
           cat << 'EOF' > builder.py
-          import os, re, json, requests
+          import os, re, json, requests, cloudscraper
 
           source_type = os.environ.get('INPUT_SOURCE_TYPE', '')
           source_url = os.environ.get('INPUT_SOURCE_URL', '')
@@ -63,29 +64,16 @@ jobs:
           apps_to_add = []
           
           if "External Repo" in source_type:
-              # قائمة بالوسطاء (البروكسيات) لمحاربة Cloudflare
-              urls_to_try = [
-                  source_url, # المحاولة المباشرة
-                  f"https://corsproxy.io/?{source_url}", # بروكسي تخطي الكلاودفلير
-                  f"https://api.codetabs.com/v1/proxy?quest={source_url}" # بروكسي احتياطي
-              ]
-              
-              headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
-              
-              ext_data = None
-              for url in urls_to_try:
-                  try:
-                      print(f"🚀 Trying to fetch from: {url}")
-                      req = requests.get(url, headers=headers, timeout=15)
-                      req.raise_for_status()
-                      ext_data = req.json()
-                      print("✅ Success!")
-                      break # إذا نجح، يوقف بحث ويكمل
-                  except Exception as e:
-                      print(f"❌ Failed: {e}")
-              
-              if not ext_data:
-                  print("\n🚨 Error: Could not fetch JSON from any source. The site's Cloudflare protection is completely blocking automated access.")
+              try:
+                  print("🚀 Firing up Cloudscraper to bypass Cloudflare...")
+                  # استخدام المتخفي
+                  scraper = cloudscraper.create_scraper(browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False})
+                  req = scraper.get(source_url, timeout=20)
+                  req.raise_for_status()
+                  ext_data = req.json()
+                  print("✅ Bypass Successful!")
+              except Exception as e:
+                  print(f"🚨 Cloudscraper failed to bypass protection: {e}")
                   exit(1)
 
               ext_apps = ext_data.get('apps', [])
@@ -152,15 +140,25 @@ jobs:
                 contents: write
               steps:
                 - uses: actions/checkout@v4
-                - name: Sync App (Fallback Proxies)
+                - name: Setup Python
+                  uses: actions/setup-python@v5
+                  with:
+                    python-version: '3.10'
+                - name: Sync App via Cloudscraper
                   run: |
-                    # المحاولة عبر عدة بروكسيات حتى ينجح
-                    curl -s -f -H "User-Agent: Mozilla/5.0" "{source_url}" > ext.json || \\
-                    curl -s -f -L "https://corsproxy.io/?{source_url}" > ext.json || \\
-                    curl -s -f -L "https://api.codetabs.com/v1/proxy?quest={source_url}" > ext.json
-                    
-                    if [ ! -s ext.json ]; then
-                      echo "Failed to fetch JSON"
+                    pip install cloudscraper
+                    python -c "
+                    import cloudscraper, json
+                    scraper = cloudscraper.create_scraper(browser={{'browser': 'chrome', 'platform': 'windows', 'mobile': False}})
+                    try:
+                        resp = scraper.get('{source_url}')
+                        with open('ext.json', 'w') as f:
+                            f.write(resp.text)
+                    except:
+                        pass
+                    "
+                    if [ ! -s ext.json ] || ! jq -e . ext.json >/dev/null 2>&1; then
+                      echo "Failed to bypass CF or invalid JSON"
                       exit 1
                     fi
                     
@@ -192,5 +190,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json icons/ .github/workflows/
-          git commit -m "🤖 Dashboard: Processed apps using Multi-Proxy Bypass" || echo "No changes"
+          git commit -m "🤖 Dashboard: Processed apps using Cloudscraper" || echo "No changes"
           git push

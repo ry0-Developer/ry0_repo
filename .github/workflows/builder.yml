@@ -63,8 +63,16 @@ jobs:
           apps_to_add = []
           
           if "External Repo" in source_type:
-              req = requests.get(source_url)
-              ext_data = req.json()
+              try:
+                  # إضافة Headers عشان السيرفر ما يحجب الطلب ويعتبره متصفح حقيقي
+                  headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+                  req = requests.get(source_url, headers=headers)
+                  req.raise_for_status()
+                  ext_data = req.json()
+              except Exception as e:
+                  print(f"Error fetching or parsing JSON from {source_url}: {e}")
+                  exit(1)
+
               ext_apps = ext_data.get('apps', [])
               
               if "Specific App" in source_type:
@@ -73,10 +81,13 @@ jobs:
                       if local_name_input: app['name'] = local_name_input
                       apps_to_add.append(app)
                   else:
-                      print(f"Error: {external_name} not found.")
+                      print(f"Error: App '{external_name}' not found in external repo.")
                       exit(1)
                       
               elif "Latest Updated App" in source_type:
+                  if not ext_apps:
+                      print("Error: No apps found in external repo.")
+                      exit(1)
                   def get_date(app):
                       try:
                           return app.get('versions', [{}])[0].get('date', '1970-01-01T00:00:00Z')
@@ -113,7 +124,6 @@ jobs:
               wf_path = f".github/workflows/sync_{safe_name}.yml"
               if "External Repo" in source_type:
                   ext_target = app_name if "ALL Apps" in source_type or "Latest" in source_type else external_name
-                  # تم إضافة جدول زمني schedule عشان يشتغل يومياً تلقائياً زي باقي تطبيقاتك
                   workflow_content = f"""name: Update {app_name}
           on:
             workflow_dispatch:
@@ -129,7 +139,7 @@ jobs:
                 - uses: actions/checkout@v4
                 - name: Sync App
                   run: |
-                    curl -s "{source_url}" > ext.json
+                    curl -s -H "User-Agent: Mozilla/5.0" "{source_url}" > ext.json
                     VERSION=$(jq -r '.apps[] | select(.name == "{ext_target}") | .versions[0].version' ext.json)
                     URL=$(jq -r '.apps[] | select(.name == "{ext_target}") | .versions[0].downloadURL' ext.json)
                     SIZE=$(jq -r '.apps[] | select(.name == "{ext_target}") | .versions[0].size' ext.json)
@@ -158,5 +168,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json icons/ .github/workflows/
-          git commit -m "🤖 Dashboard: Added apps with daily schedule" || echo "No changes"
+          git commit -m "🤖 Dashboard: Processed apps successfully" || echo "No changes"
           git push

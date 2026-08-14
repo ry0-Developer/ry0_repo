@@ -1,0 +1,51 @@
+name: Update YouTube Music Ultimate+ (2.4.1)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Sync App via Cloudscraper
+        run: |
+          pip install cloudscraper
+          python -c "
+          import cloudscraper, json
+          scraper = cloudscraper.create_scraper(browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False})
+          try:
+              resp = scraper.get('https://repo.ballermc.com/repo.json')
+              with open('ext.json', 'w') as f:
+                  f.write(resp.text)
+          except:
+              pass
+          "
+          if [ ! -s ext.json ] || ! jq -e . ext.json >/dev/null 2>&1; then
+            echo "Failed to bypass CF or invalid JSON"
+            exit 1
+          fi
+          
+          VERSION=$(jq -r '.apps[] | select(.name == "YouTube Music Ultimate+ (2.4.1)") | .versions[0].version' ext.json)
+          URL=$(jq -r '.apps[] | select(.name == "YouTube Music Ultimate+ (2.4.1)") | .versions[0].downloadURL' ext.json)
+          SIZE=$(jq -r '.apps[] | select(.name == "YouTube Music Ultimate+ (2.4.1)") | .versions[0].size' ext.json)
+          DATE=$(jq -r '.apps[] | select(.name == "YouTube Music Ultimate+ (2.4.1)") | .versions[0].date' ext.json)
+          
+          if [ "$VERSION" != "null" ]; then
+            jq --arg app "YouTube Music Ultimate+ (2.4.1)" --arg v "$VERSION" --arg u "$URL" --arg d "$DATE" --argjson s "$SIZE" \
+            '(.apps[] | select(.name == $app)).versions[0] |= . + {version: $v, date: $d, downloadURL: $u, size: $s}' repo.json > tmp.json && mv tmp.json repo.json
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add repo.json
+            git commit -m "Auto-sync YouTube Music Ultimate+ (2.4.1) to $VERSION" || echo "No changes"
+            git push
+          fi

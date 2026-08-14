@@ -1,4 +1,4 @@
-name: App Builder Bot 👷‍♂️
+name: App Builder Bot
 
 on:
   issues:
@@ -10,15 +10,11 @@ permissions:
 
 jobs:
   build-app:
-    # 🔒 الحماية هنا: يتأكد إن الـ Issue فيها علامة (auto-add) + يتأكد إن صاحب الـ Issue هو ry0-x حصراً
-    if: contains(github.event.issue.labels.*.name, 'auto-add') && contains(github.actor, 'ry0-x')
+    if: github.actor == 'ry0-x'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-# ... والباقي سليم 100%
         uses: actions/checkout@v4
-
-# ... (باقي الكود اللي تحت مثل ما هو بدون أي تغيير) ...
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -57,7 +53,7 @@ jobs:
           apps_to_add = []
           
           # Fetch Data
-          if "External Repo" in source_type:
+          if source_type and "External Repo" in source_type:
               req = requests.get(source_url)
               ext_data = req.json()
               ext_apps = ext_data.get('apps', [])
@@ -77,14 +73,12 @@ jobs:
                           return app.get('versions', [{}])[0].get('date', '1970-01-01T00:00:00Z')
                       except:
                           return '1970-01-01T00:00:00Z'
-                  # Sort by newest date
                   ext_apps.sort(key=get_date, reverse=True)
                   apps_to_add.append(ext_apps[0])
                   
               elif "ALL Apps" in source_type:
                   apps_to_add = ext_apps
           else:
-              # Standard GitHub Release
               apps_to_add.append({
                   "name": local_name_input or "New App",
                   "bundleIdentifier": parse_field('Bundle Identifier') or "com.custom.app",
@@ -94,7 +88,6 @@ jobs:
                   "versions": [{"version": "1.0", "date": "2026-08-14T00:00:00Z", "downloadURL": "TBD", "size": 0}]
               })
 
-          # Parse manual icon if provided
           custom_icon_url = None
           if icon_text:
               url_match = re.search(r'(https?://[^\s)]+)', icon_text)
@@ -106,14 +99,11 @@ jobs:
           os.makedirs('.github/workflows', exist_ok=True)
           os.makedirs('icons', exist_ok=True)
 
-          # Process all apps
           for app in apps_to_add:
               app_name = app['name']
               safe_name = re.sub(r'[^a-zA-Z0-9]', '', app_name).lower()
               
-              # Handle Icon
               if custom_icon_url and len(apps_to_add) == 1:
-                  # Only override icon if it's a single app fetch
                   try:
                       icon_path = f"icons/{safe_name}.png"
                       with open(icon_path, 'wb') as f:
@@ -121,13 +111,11 @@ jobs:
                       app['iconURL'] = f"https://raw.githubusercontent.com/{repo_name}/main/{icon_path}"
                   except: pass
               
-              # Remove if exists, then add
               repo_data['apps'] = [a for a in repo_data['apps'] if a['name'] != app_name]
               repo_data['apps'].append(app)
               
-              # Generate Workflow
               wf_path = f".github/workflows/sync_{safe_name}.yml"
-              if "External Repo" in source_type:
+              if source_type and "External Repo" in source_type:
                   ext_target = app_name if "ALL Apps" in source_type or "Latest" in source_type else external_name
                   workflow_content = f"""name: Sync {app_name}
           on:
@@ -158,7 +146,7 @@ jobs:
                     fi
           """
               else:
-                  repo_path = source_url.replace('https://github.com/', '').strip('/')
+                  repo_path = source_url.replace('https://github.com/', '').strip('/') if source_url else ''
                   workflow_content = f"""name: Update {app_name}
           on:
             workflow_dispatch:
@@ -195,7 +183,6 @@ jobs:
               with open(wf_path, 'w') as f:
                   f.write(workflow_content)
 
-          # Save repo.json
           with open('repo.json', 'w') as f:
               json.dump(repo_data, f, indent=2)
           EOF
@@ -213,5 +200,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh issue comment ${{ github.event.issue.number }} --body "✅ **تم التنفيذ بنجاح يا مدير!** تم جلب التطبيق/التطبيقات المطلوبة بنجاح وتجهيز ملفات التحديث الخاصة بها."
+          gh issue comment ${{ github.event.issue.number }} --body "✅ **تم التنفيذ بنجاح يا مدير!**"
           gh issue close ${{ github.event.issue.number }}

@@ -3,6 +3,7 @@
   "identifier": "com.ry0_.source",
   "sourceURL": "https://ry0-x.github.io/repo.json",
   "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/ry0_.jpg",
+  "news": [],
   "apps": [
     {
       "name": "Amethyst",
@@ -91,7 +92,7 @@
     {
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
-      "developerName": "Henrik Rydg\u00e5rd",
+      "developerName": "Henrik Rydgård",
       "localizedDescription": "PSP emulator for iOS.",
       "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",
@@ -189,7 +190,7 @@
       "bundleIdentifier": "com.kdt.livecontainer",
       "developerName": "(Stable)",
       "localizedDescription": "Stable release: LiveContainer bundled with SideStore. Run iOS apps without installing them seamlessly.",
-      "iconURL": "https://github.com/ry0-x/ry0_repo/blob/main/icons/LC-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/LC-icon.png",
       "tintColor": "#000000",
       "category": "utilities",
       "versions": [
@@ -213,7 +214,7 @@
       "bundleIdentifier": "com.kdt.livecontainer.nightly",
       "developerName": "(Nightly)",
       "localizedDescription": "Nightly release: Experience the absolute latest features and commits of LiveContainer bundled with SideStore.",
-      "iconURL": "https://github.com/ry0-x/ry0_repo/blob/main/icons/LC-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/LC-icon.png",
       "tintColor": "#FF2D55",
       "category": "utilities",
       "versions": [
@@ -257,6 +258,7 @@
       "subtitle": "Mod by Mark02-2012",
       "localizedDescription": "This is a modded version of YouTube Music. This comes with the following tweaks:\nReturn-YouTube-Music-Dislikes, YTMABConfig, YouMusicPiP, VolumeBoostYT and Downloading. You can see more information about the mod at: https://github.com/Mark02-2012/YTMUltimatePLUS",
       "tintColor": "#848ef9",
+      "category": "entertainment",
       "versions": [
         {
           "version": "9.32.4",
@@ -265,8 +267,7 @@
           "downloadURL": "https://repo.ballermc.com/tubevault/YTMUltimate%2B_2.4.1_9.32.4.ipa",
           "size": 103091286
         }
-      ],
-      "appPermissions": {}
+      ]
     }
   ]
 }

@@ -1,23 +1,17 @@
 name: 🚀 Add New App to Repo
-description: Smart dashboard to automatically add an app to repo.json and generate its workflow.
+description: Smart dashboard to automatically fetch apps using multiple advanced methods.
 title: "[ADD APP] "
 labels: ["auto-add"]
 body:
-  - type: input
-    id: app_name
-    attributes:
-      label: Local App Name
-      description: The name you want to show in YOUR repo (e.g., YouTube Lite).
-    validations:
-      required: true
-
   - type: dropdown
     id: source_type
     attributes:
-      label: Source Type
-      description: Where is this app coming from?
+      label: Source Type (How should the bot fetch the app?)
+      description: Choose your fetching method.
       options:
-        - "Another Repo JSON (Auto-fill details)"
+        - "External Repo: Fetch Specific App by Name"
+        - "External Repo: Fetch ONLY the Latest Updated App"
+        - "External Repo: Fetch ALL Apps"
         - "GitHub Release (Standard App)"
     validations:
       required: true
@@ -33,16 +27,24 @@ body:
   - type: input
     id: external_app_name
     attributes:
-      label: Target App Name (Only for 'Another Repo JSON')
-      description: What is the exact name of the app in THEIR json? (e.g., YTLite). 
+      label: Target App Name (Only for 'Fetch Specific App')
+      description: If you chose "Fetch Specific App", write its exact name here. Leave blank for other options.
+    validations:
+      required: false
+
+  - type: input
+    id: app_name
+    attributes:
+      label: Local App Name (Optional)
+      description: If adding a specific app or GitHub release, you can rename it here. If left blank, the bot uses the original name.
     validations:
       required: false
 
   - type: textarea
     id: icon_upload
     attributes:
-      label: App Icon
-      description: Drag and drop the app icon here! (Or leave blank to use the icon from the external repo if available).
+      label: App Icon (Optional)
+      description: Drag and drop an icon here. If fetching from an external repo and left blank, the bot will use their original icon.
     validations:
       required: false
 

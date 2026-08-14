@@ -6,42 +6,70 @@ body:
   - type: input
     id: app_name
     attributes:
-      label: App Name
-      description: The exact name of the application (e.g., YouTube Lite).
+      label: Local App Name
+      description: The name you want to show in YOUR repo (e.g., YouTube Lite).
     validations:
       required: true
+
+  - type: dropdown
+    id: source_type
+    attributes:
+      label: Source Type
+      description: Where is this app coming from?
+      options:
+        - "Another Repo JSON (Auto-fill details)"
+        - "GitHub Release (Standard App)"
+    validations:
+      required: true
+
+  - type: input
+    id: source_url
+    attributes:
+      label: Source URL
+      description: URL to the Repo JSON (e.g., https://repo.ballermc.com/repo.json) OR GitHub Repo (e.g., LiveContainer/LiveContainer)
+    validations:
+      required: true
+
+  - type: input
+    id: external_app_name
+    attributes:
+      label: Target App Name (Only for 'Another Repo JSON')
+      description: What is the exact name of the app in THEIR json? (e.g., YTLite). 
+    validations:
+      required: false
+
+  - type: textarea
+    id: icon_upload
+    attributes:
+      label: App Icon
+      description: Drag and drop the app icon here! (Or leave blank to use the icon from the external repo if available).
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: "--- \n **👇 OPTIONAL DETAILS (Fill these ONLY if using 'GitHub Release')**"
 
   - type: input
     id: bundle_id
     attributes:
       label: Bundle Identifier
-      description: e.g., com.google.ios.youtube
     validations:
-      required: true
+      required: false
 
   - type: input
     id: developer
     attributes:
       label: Developer Name
-      description: e.g., Google / Tweaked
     validations:
-      required: true
+      required: false
 
   - type: input
     id: description
     attributes:
       label: Description
-      description: Short description of the app.
     validations:
-      required: true
-
-  - type: input
-    id: icon_name
-    attributes:
-      label: Icon Filename
-      description: Make sure you uploaded it to the icons folder! (e.g., youtube-icon.png)
-    validations:
-      required: true
+      required: false
 
   - type: dropdown
     id: category
@@ -53,32 +81,5 @@ body:
         - emulators
         - entertainment
         - social
-    validations:
-      required: true
-
-  - type: dropdown
-    id: source_type
-    attributes:
-      label: How should the bot fetch updates?
-      description: Choose the logic for the auto-update workflow.
-      options:
-        - "GitHub Release (Standard App)"
-        - "Another Repo JSON (e.g., BallerMC - No IPA download)"
-    validations:
-      required: true
-
-  - type: input
-    id: source_url
-    attributes:
-      label: Source URL
-      description: If GitHub Release, put the Repo URL (e.g., OatmealDome/dolphin-ios). If Another Repo, put the JSON URL (e.g., https://repo.ballermc.com/repo.json).
-    validations:
-      required: true
-
-  - type: input
-    id: external_app_name
-    attributes:
-      label: External App Name (Only for 'Another Repo JSON' option)
-      description: If syncing from another repo, what is the exact name of the app in THEIR json? (e.g., YTLite). Leave empty if not applicable.
     validations:
       required: false

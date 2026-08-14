@@ -1,6 +1,8 @@
-name: Telegram IPA Fetcher
+name: Auto Telegram IPA Fetcher
 
 on:
+  schedule:
+    - cron: '0 3 * * *' # يشتغل يومياً الساعة 3 الفجر بتوقيت جرينتش
   workflow_dispatch:
     inputs:
       channel_username:
@@ -8,15 +10,15 @@ on:
         required: true
         default: 'tubevault'
       app_name:
-        description: 'App Name for your Repo (e.g., YouTube)'
+        description: 'App Name exactly as in repo.json'
         required: true
-        default: 'YouTube Mod'
+        default: 'YTPlusM (1.4.2)'
 
 permissions:
   contents: write
 
 jobs:
-  fetch-from-telegram:
+  smart-fetch-telegram:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -32,15 +34,23 @@ jobs:
       - name: Install Dependencies
         run: pip install telethon cryptg
 
-      - name: Fetch IPA from Telegram
+      - name: Fetch and Check for Updates
         env:
           TG_API_ID: ${{ secrets.TG_API_ID }}
           TG_API_HASH: ${{ secrets.TG_API_HASH }}
           TG_SESSION: ${{ secrets.TG_SESSION }}
-          CHANNEL: ${{ github.event.inputs.channel_username }}
+          INPUT_CHANNEL: ${{ github.event.inputs.channel_username }}
+          INPUT_APP: ${{ github.event.inputs.app_name }}
         run: |
+          # تحديد القيم الافتراضية إذا اشتغل تلقائي (Cron) بدون تدخل منك
+          CHANNEL=${INPUT_CHANNEL:-"tubevault"}
+          APP_NAME=${INPUT_APP:-"YTPlusM (1.4.2)"}
+          
+          echo "Channel: $CHANNEL | App: $APP_NAME"
+
           cat << 'EOF' > fetch_tg.py
-          import os, asyncio, json, datetime
+          import os, asyncio, json
+          from datetime import datetime, timezone
           from telethon.sync import TelegramClient
           from telethon.sessions import StringSession
 
@@ -48,67 +58,93 @@ jobs:
           api_hash = os.environ.get('TG_API_HASH')
           session_str = os.environ.get('TG_SESSION')
           channel = os.environ.get('CHANNEL')
+          app_name = os.environ.get('APP_NAME')
 
           async def main():
+              # 1. جلب تاريخ التطبيق الحالي من ملف repo.json
+              current_date = ""
+              try:
+                  with open('repo.json', 'r') as f:
+                      repo_data = json.load(f)
+                      for app in repo_data.get('apps', []):
+                          if app.get('name') == app_name:
+                              current_date = app.get('versions', [{}])[0].get('date', "")
+                              break
+              except Exception as e:
+                  print("Could not read repo.json correctly.")
+
+              # 2. الاتصال بتيليجرام
               client = TelegramClient(StringSession(session_str), api_id, api_hash)
               await client.connect()
+              print(f"🔍 Searching @{channel} for {app_name}...")
               
-              print(f"🔍 Searching for latest IPA in @{channel}...")
-              
-              # جلب آخر 20 رسالة للبحث عن ملف IPA
               messages = await client.get_messages(channel, limit=20)
               downloaded_file = None
+              msg_date_str = ""
               
               for msg in messages:
                   if msg.document and msg.file.name and msg.file.name.lower().endswith('.ipa'):
-                      print(f"📥 Found: {msg.file.name}. Downloading now (this may take a minute)...")
+                      # تحويل تاريخ الرسالة لصيغة متوافقة مع متجرك
+                      msg_date = msg.date.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+                      
+                      # 3. المقارنة: هل التحديث جديد؟
+                      if msg_date == current_date:
+                          print("🛑 التطبيق اللي في القناة هو نفس اللي عندك بالمتجر.. ما فيه تحديث جديد!")
+                          await client.disconnect()
+                          exit(0) # الخروج بدون أخطاء وبدون تحميل
+                      
+                      print(f"🚀 تحديث جديد نزل! جاري تحميل: {msg.file.name}...")
                       downloaded_file = await client.download_media(msg, file=msg.file.name)
-                      print("✅ Download Complete!")
+                      msg_date_str = msg_date
                       break
               
               await client.disconnect()
               
               if downloaded_file:
-                  # حفظ اسم الملف عشان نستخدمه في الخطوات الجاية
                   with open('file_info.env', 'w') as f:
                       f.write(f"IPA_FILE={downloaded_file}\n")
+                      f.write(f"NEW_DATE={msg_date_str}\n")
               else:
-                  print("❌ No IPA files found in recent messages.")
+                  print("❌ ما لقيت أي ملف IPA في آخر الرسائل.")
                   exit(1)
 
           asyncio.run(main())
           EOF
+          
+          # تصدير المتغيرات لسكربت البايثون
+          export CHANNEL APP_NAME
           python fetch_tg.py
 
       - name: Upload to GitHub Releases
+        # هذي الخطوة ما راح تشتغل إلا إذا البايثون لقى تحديث جديد
+        if: success() && hashFiles('file_info.env') != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           source file_info.env
-          echo "Uploading $IPA_FILE to Releases..."
+          echo "Uploading $IPA_FILE..."
           gh release upload nightly "$IPA_FILE" --clobber || gh release create nightly "$IPA_FILE" --clobber
 
       - name: Update repo.json
+        if: success() && hashFiles('file_info.env') != ''
         env:
-          APP_NAME: ${{ github.event.inputs.app_name }}
+          INPUT_APP: ${{ github.event.inputs.app_name }}
           REPO_NAME: ${{ github.repository }}
         run: |
+          APP_NAME=${INPUT_APP:-"YTPlusM (1.4.2)"}
           source file_info.env
-          DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           FILESIZE=$(stat -c%s "$IPA_FILE")
-          # تنظيف اسم الملف للرابط
           SAFE_FILENAME=$(basename "$IPA_FILE" | tr ' ' '.')
           URL="https://github.com/$REPO_NAME/releases/download/nightly/$SAFE_FILENAME"
           
-          # استخراج إصدار عشوائي أو تاريخ اليوم كإصدار
-          VERSION=$(date +"%Y.%m.%d")
+          # استخدام تاريخ رسالة تيليجرام كإصدار للتطبيق
+          VERSION=$(date -d "${NEW_DATE}" +"%Y.%m.%d")
           
-          # تحديث ملف JSON
-          jq --arg app "$APP_NAME" --arg v "$VERSION" --arg u "$URL" --arg d "$DATE_NOW" --argjson s "$FILESIZE" \
+          jq --arg app "$APP_NAME" --arg v "$VERSION" --arg u "$URL" --arg d "$NEW_DATE" --argjson s "$FILESIZE" \
           '(.apps[] | select(.name == $app)).versions[0] |= . + {version: $v, date: $d, downloadURL: $u, size: $s}' repo.json > tmp.json && mv tmp.json repo.json
           
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "📲 Uploaded $APP_NAME from Telegram" || echo "No changes"
+          git commit -m "🚀 Auto-Updated $APP_NAME from Telegram"
           git push

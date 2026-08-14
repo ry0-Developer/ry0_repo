@@ -1,8 +1,8 @@
 {
   "name": "ry0_",
   "identifier": "com.ry0_.repo.final.fixed",
-  "sourceURL": "https://ry0-developer.github.io/ry0_repo/repo.json",
-  "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/ry0_.jpg",
+  "sourceURL": "https://ry0-x.github.io/ry0_repo/repo.json",
+  "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/ry0_.jpg",
   "apps": [
     {
       "name": "Amethyst",
@@ -10,14 +10,14 @@
       "developerName": "crystall1ne.dev",
       "subtitle": "Bringing Minecraft: Java Edition to mobile devices.",
       "localizedDescription": "Amethyst nightly build auto-updated via GitHub Actions. Includes JIT and memory entitlements.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Amethyst-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/Amethyst-icon.png",
       "tintColor": "#9649B8",
       "category": "games",
       "versions": [
         {
           "version": "2026.08.14.0116",
           "date": "2026-04-02T00:00:00Z",
-          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/amethyst.ipa",
+          "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/amethyst.ipa",
           "size": 150357372
         }
       ],
@@ -43,14 +43,14 @@
       "bundleIdentifier": "com.stossy11.MelonNX",
       "developerName": "MeloNX",
       "localizedDescription": "Nintendo Switch emulator for iOS. Auto-updated to the latest build.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/MeloNX-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/MeloNX-icon.png",
       "tintColor": "#f8566f",
       "category": "emulators",
       "versions": [
         {
           "version": "MeloNX",
           "date": "2026-08-14T01:26:03Z",
-          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/melonx.ipa",
+          "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/melonx.ipa",
           "size": 101311
         }
       ],
@@ -68,14 +68,14 @@
       "bundleIdentifier": "me.oatmealDome.DolphiniOS",
       "developerName": "OatmealDome",
       "localizedDescription": "GameCube and Wii emulator for iOS. (Pre-release/Nightly builds)",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/DolphiniOS-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/DolphiniOS-icon.png",
       "tintColor": "#007AFF",
       "category": "emulators",
       "versions": [
         {
           "version": "5.0.0b6",
           "date": "2026-08-14T01:17:58Z",
-          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/dolphinios.ipa",
+          "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/dolphinios.ipa",
           "size": 17963367
         }
       ],
@@ -93,14 +93,14 @@
       "bundleIdentifier": "org.ppsspp.ppsspp",
       "developerName": "Henrik Rydgård",
       "localizedDescription": "PSP emulator for iOS.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/PPSPP-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",
       "category": "emulators",
       "versions": [
         {
           "version": "1.20.4",
           "date": "2026-08-14T01:28:07Z",
-          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/ppsspp.ipa",
+          "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/ppsspp.ipa",
           "size": 31124277
         }
       ],
@@ -116,14 +116,14 @@
       "bundleIdentifier": "com.ipsx2.ios",
       "developerName": "otti83",
       "localizedDescription": "PlayStation 2 emulator for iOS.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/iPSX2-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/iPSX2-icon.png",
       "tintColor": "#1B1280",
       "category": "emulators",
       "versions": [
         {
           "version": "0.2.0dev",
           "date": "2026-08-07T12:50:16Z",
-          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/ipsx2.ipa",
+          "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/ipsx2.ipa",
           "size": 11172808
         }
       ],
@@ -141,14 +141,14 @@
       "bundleIdentifier": "com.xenios.app",
       "developerName": "Xenios",
       "localizedDescription": "Xenios emulator port for iOS.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/XeniOS-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/XeniOS-icon.png",
       "tintColor": "#FF5733",
       "category": "emulators",
       "versions": [
         {
           "version": "release-v2.0.1-build-9730",
           "date": "2026-08-14T01:30:06Z",
-          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/xenios.ipa",
+          "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/xenios.ipa",
           "size": 46253576
         }
       ],
@@ -164,14 +164,14 @@
       "bundleIdentifier": "com.manicemu.ios",
       "developerName": "Manic-EMU",
       "localizedDescription": "All-in-one retro game emulator for iOS. Packed with powerful features and a sleek UI.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Manic-EMU-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/Manic-EMU-icon.png",
       "tintColor": "#FF2D55",
       "category": "emulators",
       "versions": [
         {
           "version": "1.9.2",
           "date": "2026-08-14T01:24:07Z",
-          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/manic.ipa",
+          "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/manic.ipa",
           "size": 227390683
         }
       ],
@@ -189,14 +189,14 @@
       "bundleIdentifier": "com.kdt.livecontainer",
       "developerName": "(Stable)",
       "localizedDescription": "Stable release: LiveContainer bundled with SideStore. Run iOS apps without installing them seamlessly.",
-      "iconURL": "https://github.com/ry0-Developer/ry0_repo/blob/main/icons/LC-icon.png",
+      "iconURL": "https://github.com/ry0-x/ry0_repo/blob/main/icons/LC-icon.png",
       "tintColor": "#000000",
       "category": "utilities",
       "versions": [
         {
           "version": "3.7.2",
           "date": "2026-04-05T21:16:26Z",
-          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/livecontainer_stable.ipa",
+          "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/livecontainer_stable.ipa",
           "size": 34811049
         }
       ],
@@ -213,14 +213,14 @@
       "bundleIdentifier": "com.kdt.livecontainer.nightly",
       "developerName": "(Nightly)",
       "localizedDescription": "Nightly release: Experience the absolute latest features and commits of LiveContainer bundled with SideStore.",
-      "iconURL": "https://github.com/ry0-Developer/ry0_repo/blob/main/icons/LC-icon.png",
+      "iconURL": "https://github.com/ry0-x/ry0_repo/blob/main/icons/LC-icon.png",
       "tintColor": "#FF2D55",
       "category": "utilities",
       "versions": [
         {
           "version": "Nightly-2026.04.05",
           "date": "2026-04-05T12:56:30Z",
-          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/livecontainer_nightly.ipa",
+          "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/livecontainer_nightly.ipa",
           "size": 34540268
         }
       ],
@@ -237,14 +237,14 @@
       "bundleIdentifier": "com.hugeblack.getmoreram",
       "developerName": "hugeBlack",
       "localizedDescription": "A utility app to clear and free up RAM on iOS devices.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-developer/ry0_repo/main/icons/Get-More-Ram-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/Get-More-Ram-icon.png",
       "tintColor": "#000000",
       "category": "utilities",
       "versions": [
         {
           "version": "nightly",
           "date": "2026-08-14T01:19:56Z",
-          "downloadURL": "https://github.com/ry0-developer/ry0_repo/releases/download/nightly/getmoreram.ipa",
+          "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/getmoreram.ipa",
           "size": 634370
         }
       ]

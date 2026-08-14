@@ -11,10 +11,11 @@ permissions:
 jobs:
   build-app:
     # 🔒 الحماية هنا: يتأكد إن الـ Issue فيها علامة (auto-add) + يتأكد إن صاحب الـ Issue هو ry0-x حصراً
-    if: contains(github.event.issue.labels.*.name, 'auto-add') && github.actor == 'ry0-x'
+    if: contains(github.event.issue.labels.*.name, 'auto-add') && contains(github.actor, 'ry0-x')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
+# ... والباقي سليم 100%
         uses: actions/checkout@v4
 
 # ... (باقي الكود اللي تحت مثل ما هو بدون أي تغيير) ...

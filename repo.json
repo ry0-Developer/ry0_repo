@@ -92,7 +92,7 @@
     {
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
-      "developerName": "Henrik Rydg\u00e5rd",
+      "developerName": "Henrik Rydgård",
       "localizedDescription": "PSP emulator for iOS.",
       "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",
@@ -422,10 +422,10 @@
       "category": "emulators",
       "versions": [
         {
-          "version": "1.0",
-          "date": "2026-08-15T00:00:00Z",
-          "downloadURL": "\u0631\u0627\u0628\u0637_\u0645\u0624\u0642\u062a",
-          "size": 0
+          "version": "iOSv2.5.2",
+          "date": "2026-08-06T15:49:46Z",
+          "downloadURL": "https://github.com/ARMSX2/ARMSX2/releases/download/iOSv2.5.2/ARMSX2-iOS-2.5.2.ipa",
+          "size": 26425138
         }
       ],
       "appPermissions": {

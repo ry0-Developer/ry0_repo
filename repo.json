@@ -524,10 +524,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "1.0",
-          "date": "2026-08-15T00:00:00Z",
-          "downloadURL": "رابط_مؤقت",
-          "size": 0
+          "version": "development",
+          "date": "2026-08-14T20:02:21Z",
+          "downloadURL": "https://github.com/rooootdev/mond/releases/download/development/mond.ipa",
+          "size": 3206037
         }
       ]
     },

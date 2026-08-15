@@ -3,60 +3,59 @@ name: Update LiveContainer Stable
 on:
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+permissions:
+  contents: write
 
 jobs:
-  update:
+  update-app:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  
-
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Fetch Latest Stable
-        run: |
-          mkdir -p apps/utilities
-          
-          # جلب رقم الإصدار فقط عشان نكتبه في المتجر
-          API_URL="https://api.github.com/repos/LiveContainer/LiveContainer/releases/latest"
-          REAL_VERSION=$(curl -s "$API_URL" | jq -r '.tag_name' | sed 's/^v//')
-          
-          if [ "$REAL_VERSION" == "null" ] || [ -z "$REAL_VERSION" ]; then
-            REAL_VERSION="Stable"
-          fi
-          echo "Version: $REAL_VERSION"
-
-          # استخدام الرابط المباشر والثابت اللي أرسلته
-          DOWNLOAD_URL="https://github.com/LiveContainer/LiveContainer/releases/latest/download/LiveContainer+SideStore.ipa"
-          
-          echo "Downloading from direct link..."
-          curl -L "$DOWNLOAD_URL" -o apps/utilities/livecontainer_stable.ipa
-          echo "$REAL_VERSION" > version.txt
-
-      - name: Upload to Release
+      - name: Fetch Direct Link and Update repo.json
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_REPO: "LiveContainer/LiveContainer"
+          APP_NAME: "LiveContainer+ SideStore (Stable)"
         run: |
-          gh release upload nightly apps/utilities/livecontainer_stable.ipa --clobber || gh release create nightly apps/utilities/livecontainer_stable.ipa --clobber
-
-      - name: Update JSON Data
-        run: |
-          REAL_VERSION=$(cat version.txt)
-          DATE_NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          FILESIZE=$(stat -c%s "apps/utilities/livecontainer_stable.ipa" || echo "35000000")
+          echo "🔍 Searching for latest stable release in $TARGET_REPO..."
           
-          jq --arg version "$REAL_VERSION" \
-             --arg date "$DATE_NOW" \
-             --argjson size "$FILESIZE" \
-             '(.apps[] | select(.name == "LiveContainer (Stable)")).versions[0] |= . + {version: $version, date: $date, size: $size}' repo.json > temp.json && mv temp.json repo.json
-
-      - name: Commit Changes
-        run: |
+          # جلب أحدث إصدار مستقر
+          RELEASE_JSON=$(curl -sL "https://api.github.com/repos/$TARGET_REPO/releases/latest")
+          VERSION=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
+          
+          if [ "$VERSION" == "null" ] || [ -z "$VERSION" ]; then
+            echo "❌ No stable release found."
+            exit 1
+          fi
+          
+          # 1. محاولة جلب النسخة المدمجة مع SideStore
+          IPA_ASSET=$(echo "$RELEASE_JSON" | jq -c '.assets[] | select(.name | ascii_downcase | contains("sidestore") and endswith(".ipa"))' | head -n 1)
+          
+          # 2. إذا لم تتوفر، يتم جلب النسخة العادية
+          if [ -z "$IPA_ASSET" ]; then
+            IPA_ASSET=$(echo "$RELEASE_JSON" | jq -c '.assets[] | select(.name | ascii_downcase | endswith(".ipa"))' | head -n 1)
+          fi
+          
+          if [ -z "$IPA_ASSET" ]; then
+            echo "❌ No IPA file found."
+            exit 1
+          fi
+          
+          DOWNLOAD_URL=$(echo "$IPA_ASSET" | jq -r '.browser_download_url')
+          FILESIZE=$(echo "$IPA_ASSET" | jq -r '.size')
+          DATE=$(echo "$RELEASE_JSON" | jq -r '.published_at')
+          
+          echo "✅ Found Direct Link: $DOWNLOAD_URL"
+          echo "🚀 Updating $APP_NAME to version $VERSION"
+          
+          # تحديث المتجر
+          jq --arg app "$APP_NAME" --arg v "$VERSION" --arg u "$DOWNLOAD_URL" --arg d "$DATE" --argjson s "$FILESIZE" \
+          '(.apps[] | select(.name == $app)).versions[0] |= . + {version: $v, date: $d, downloadURL: $u, size: $s}' repo.json > tmp.json && mv tmp.json repo.json
+          
+          # الحفظ
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "Auto-update LiveContainer Stable to Version $REAL_VERSION" || echo "No changes"
+          git commit -m "🚀 Auto-Updated LiveContainer (Stable) to $VERSION (Direct Link)" || echo "No changes to commit"
           git push

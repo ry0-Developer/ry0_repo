@@ -1,4 +1,4 @@
-name: Cloudflare R2 IPA Fetcher
+name: Minecraft Cloudflare R2 IPA Fetcher
 
 on:
   workflow_dispatch:
@@ -30,16 +30,17 @@ jobs:
       - name: Install Dependencies
         run: pip install telethon cryptg
 
-      - name: Fetch IPA from Telegram
+      - name: Fetch IPA and Extract Info
         env:
           TG_API_ID: ${{ secrets.TG_API_ID }}
           TG_API_HASH: ${{ secrets.TG_API_HASH }}
           TG_SESSION: ${{ secrets.TG_SESSION }}
           CHANNEL: ${{ github.event.inputs.channel_username }}
+          APP_NAME: ${{ github.event.inputs.app_name }}
         run: |
           cat << 'EOF' > fetch_tg.py
           import os, asyncio, re
-          from datetime import timezone
+          from datetime import datetime, timezone
           from telethon.sync import TelegramClient
           from telethon.sessions import StringSession
 
@@ -47,6 +48,7 @@ jobs:
           api_hash = os.environ.get('TG_API_HASH')
           session_str = os.environ.get('TG_SESSION')
           channel = os.environ.get('CHANNEL')
+          app_name_input = os.environ.get('APP_NAME')
 
           async def main():
               client = TelegramClient(StringSession(session_str), api_id, api_hash)
@@ -55,27 +57,40 @@ jobs:
               
               messages = await client.get_messages(channel, limit=20)
               downloaded_file = None
-              msg_date_str = ""
+              original_name = ""
               
               for msg in messages:
                   if msg.document and msg.file.name and msg.file.name.lower().endswith('.ipa'):
-                      msg_date_str = msg.date.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-                      print(f"📥 Found: {msg.file.name}. Downloading...")
-                      downloaded_file = await client.download_media(msg, file=msg.file.name)
+                      original_name = msg.file.name
+                      print(f"📥 Found: {original_name}. Downloading...")
+                      downloaded_file = await client.download_media(msg, file=original_name)
                       break
               
               await client.disconnect()
               
               if downloaded_file:
-                  # تنظيف اسم الملف بالكامل من أي رموز غريبة أو مسافات لتجنب أي أخطاء
-                  clean_name = re.sub(r'[^A-Za-z0-9_.-]', '_', os.path.basename(downloaded_file))
-                  os.rename(downloaded_file, clean_name)
+                  # 1. استخراج رقم الإصدار بذكاء من اسم الملف في تيليجرام
+                  version_match = re.search(r'(\d+\.\d+(?:\.\d+)*)', original_name)
+                  if version_match:
+                      extracted_version = version_match.group(1)
+                  else:
+                      extracted_version = "1.0" # إصدار افتراضي لو ما لقى أرقام في الاسم
                   
-                  # استخدام الطريقة الرسمية والآمنة لحفظ المتغيرات في GitHub
+                  # 2. تغيير اسم الملف ليكون نظيف: (مثلاً Minecraft_1.26.44.ipa)
+                  clean_app_name = re.sub(r'[^A-Za-z0-9]', '', app_name_input)
+                  new_file_name = f"{clean_app_name}_{extracted_version}.ipa"
+                  
+                  os.rename(downloaded_file, new_file_name)
+                  
+                  # 3. جلب تاريخ اللحظة الحالية (وقت الرفع للريبو)
+                  upload_date_str = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+                  
+                  # حفظ المتغيرات لباقي الخطوات
                   env_file = os.environ.get('GITHUB_ENV')
                   with open(env_file, 'a') as f:
-                      f.write(f"IPA_FILE={clean_name}\n")
-                      f.write(f"NEW_DATE={msg_date_str}\n")
+                      f.write(f"IPA_FILE={new_file_name}\n")
+                      f.write(f"APP_VERSION={extracted_version}\n")
+                      f.write(f"UPLOAD_DATE={upload_date_str}\n")
               else:
                   print("❌ No IPA found.")
                   exit(1)
@@ -104,15 +119,16 @@ jobs:
           
           # تجهيز الرابط المباشر
           DIRECT_URL="${R2_PUBLIC_URL}/${IPA_FILE}"
-          VERSION=$(date -d "${NEW_DATE}" +"%Y.%m.%d")
           
           echo "Direct Link: $DIRECT_URL"
+          echo "Version: $APP_VERSION"
+          echo "Upload Date: $UPLOAD_DATE"
           
-          jq --arg app "$APP_NAME" --arg v "$VERSION" --arg u "$DIRECT_URL" --arg d "$NEW_DATE" --argjson s "$FILESIZE" \
+          jq --arg app "$APP_NAME" --arg v "$APP_VERSION" --arg u "$DIRECT_URL" --arg d "$UPLOAD_DATE" --argjson s "$FILESIZE" \
           '(.apps[] | select(.name == $app)).versions[0] |= . + {version: $v, date: $d, downloadURL: $u, size: $s}' repo.json > tmp.json && mv tmp.json repo.json
           
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "🚀 Auto-Updated $APP_NAME (Hosted on Cloudflare R2)"
+          git commit -m "🚀 Auto-Updated $APP_NAME v$APP_VERSION (Hosted on R2)"
           git push

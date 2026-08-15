@@ -540,10 +540,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "1.0",
-          "date": "2026-08-15T00:00:00Z",
-          "downloadURL": "رابط_مؤقت",
-          "size": 0
+          "version": "0.2",
+          "date": "2026-05-22T19:53:53Z",
+          "downloadURL": "https://github.com/rooootdev/lara/releases/download/0.2/lara_v0.2.ipa",
+          "size": 5474210
         }
       ]
     }

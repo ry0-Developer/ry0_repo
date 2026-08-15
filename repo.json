@@ -498,6 +498,54 @@
           "local.sandboxed-jit"
         ]
       }
+    },
+    {
+      "name": "JESSI",
+      "bundleIdentifier": "com.baconium.jessi",
+      "developerName": "Baconium",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/JESSI-icon.png",
+      "tintColor": "#4A90E2",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-08-15T00:00:00Z",
+          "downloadURL": "رابط_مؤقت",
+          "size": 0
+        }
+      ]
+    },
+    {
+      "name": "mond",
+      "bundleIdentifier": "com.rooootdev.mond",
+      "developerName": "rooootdev",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/mond-icon.png",
+      "tintColor": "#000000",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-08-15T00:00:00Z",
+          "downloadURL": "رابط_مؤقت",
+          "size": 0
+        }
+      ]
+    },
+    {
+      "name": "lara",
+      "bundleIdentifier": "com.rooootdev.lara",
+      "developerName": "rooootdev",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/Lara-icon.png",
+      "tintColor": "#FF6600",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-08-15T00:00:00Z",
+          "downloadURL": "رابط_مؤقت",
+          "size": 0
+        }
+      ]
     }
   ]
 }

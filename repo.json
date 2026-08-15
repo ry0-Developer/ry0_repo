@@ -186,11 +186,11 @@
       }
     },
     {
-      "name": "LiveContainer+ SideStore (Stable)",
+      "name": "LC+SS (Stable)",
       "bundleIdentifier": "com.kdt.livecontainer",
       "developerName": "(Stable)",
       "localizedDescription": "Stable release: LiveContainer bundled with SideStore. Run iOS apps without installing them seamlessly.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/LC-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/LC+SS_stable-icon.png",
       "tintColor": "#000000",
       "category": "utilities",
       "versions": [
@@ -210,11 +210,11 @@
       }
     },
     {
-      "name": "LiveContainer + SideStore (Nightly)",
+      "name": "LC+SS (Nightly)",
       "bundleIdentifier": "com.kdt.livecontainer.nightly",
       "developerName": "(Nightly)",
       "localizedDescription": "Nightly release: Experience the absolute latest features and commits of LiveContainer bundled with SideStore.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/LC-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/LC+SS_nightly-icon.png",
       "tintColor": "#FF2D55",
       "category": "utilities",
       "versions": [
@@ -262,7 +262,7 @@
       "bundleIdentifier": "com.kdt.livecontainer.standalone.nightly",
       "developerName": "(Nightly)",
       "localizedDescription": "Nightly release: Standalone version of LiveContainer.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/LC-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/LC_nightly-icon.png",
       "tintColor": "#FF2D55",
       "category": "utilities",
       "versions": [

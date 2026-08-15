@@ -287,6 +287,23 @@
         }
       ],
       "category": "entertainment"
+    },
+    {
+      "name": "Minecraft",
+      "bundleIdentifier": "com.mojang.minecraftpe",
+      "developerName": "Mojang",
+      "localizedDescription": "Minecraft iOS port updated automatically via Cloudflare R2.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/minecraft-icon.png",
+      "tintColor": "#4B8B3B",
+      "category": "games",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-08-15T00:00:00Z",
+          "downloadURL": "رابط_مؤقت",
+          "size": 0
+        }
+      ]
     }
   ]
 }

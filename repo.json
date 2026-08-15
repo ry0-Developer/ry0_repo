@@ -291,10 +291,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "1.0",
-          "date": "2026-08-15T00:00:00Z",
-          "downloadURL": "رابط_مؤقت",
-          "size": 0
+          "version": "0.6.3",
+          "date": "2026-05-05T03:59:02Z",
+          "downloadURL": "https://github.com/SideStore/SideStore/releases/download/0.6.3/SideStore.ipa",
+          "size": 28632252
         }
       ]
     },

@@ -1,4 +1,4 @@
-name: Update LiveContainer Nightly
+name: Update LC+SS_nightly
 
 on:
   workflow_dispatch:
@@ -35,14 +35,11 @@ jobs:
             exit 1
           fi
           
-          # البحث عن النسخة المدمجة مع SideStore أولاً
+          # البحث الحصري عن النسخة المدمجة مع SideStore فقط
           IPA_ASSET=$(echo "$RELEASE_JSON" | jq -c '.assets[] | select(.name | ascii_downcase | contains("sidestore") and endswith(".ipa"))' | head -n 1)
-          if [ -z "$IPA_ASSET" ]; then
-            IPA_ASSET=$(echo "$RELEASE_JSON" | jq -c '.assets[] | select(.name | ascii_downcase | endswith(".ipa"))' | head -n 1)
-          fi
           
           if [ -z "$IPA_ASSET" ]; then
-            echo "❌ No IPA file found."
+            echo "❌ No SideStore bundled IPA found in the nightly release. Skipping..."
             exit 1
           fi
           

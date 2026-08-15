@@ -61,3 +61,10 @@ jobs:
 
           gh workflow run telegram_fetch.yml || true
           echo "Minecraft R2 Fetcher triggered! Queue completed."
+
+          gh workflow run telegram_fetch.yml || true
+          echo "Minecraft R2 Fetcher triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run smart_sync_youtube.yml || true
+          echo "Smart Sync YouTube triggered! Master Queue completed."

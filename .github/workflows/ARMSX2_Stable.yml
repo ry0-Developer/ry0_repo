@@ -18,12 +18,42 @@ jobs:
           TARGET_REPO: "ARMSX2/ARMSX2"
           APP_NAME: "ARMSX2 (Stable)"
         run: |
-          RELEASE_JSON=$(curl -sL "https://api.github.com/repos/$TARGET_REPO/releases/latest")
+          echo "🔍 Searching for latest stable iOS release in $TARGET_REPO..."
+          
+          # جلب كل الإصدارات من صفحة المطور
+          ALL_RELEASES=$(curl -sL "https://api.github.com/repos/$TARGET_REPO/releases")
+          
+          # 1. البحث بذكاء عن إصدار مستقر يحتوي اسمه على كلمة "ios" (مثل اللي بالصورة)
+          RELEASE_JSON=$(echo "$ALL_RELEASES" | jq -c '[.[] | select(.prerelease == false and (.name | ascii_downcase | contains("ios")))] | .[0]')
+          
+          # 2. خطة بديلة: إذا ما لقى كلمة ios في الاسم، يبحث عن أحدث إصدار مستقر يحتوي فعلياً على ملف ipa
+          if [ "$RELEASE_JSON" == "null" ] || [ -z "$RELEASE_JSON" ]; then
+            RELEASE_JSON=$(echo "$ALL_RELEASES" | jq -c '[.[] | select(.prerelease == false and (.assets | map(.name | ascii_downcase | endswith(".ipa")) | any))] | .[0]')
+          fi
+          
           VERSION=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
+          
+          if [ "$VERSION" == "null" ] || [ -z "$VERSION" ]; then
+            echo "❌ No stable iOS release found. Skipping..."
+            exit 0
+          fi
+          
+          # استخراج ملف الـ ipa من هذا الإصدار
           IPA_ASSET=$(echo "$RELEASE_JSON" | jq -c '.assets[] | select(.name | ascii_downcase | endswith(".ipa"))' | head -n 1)
+          
+          if [ -z "$IPA_ASSET" ] || [ "$IPA_ASSET" == "null" ]; then
+            echo "❌ No IPA file found in the selected release. Skipping..."
+            exit 0
+          fi
+          
           DOWNLOAD_URL=$(echo "$IPA_ASSET" | jq -r '.browser_download_url')
           FILESIZE=$(echo "$IPA_ASSET" | jq -r '.size')
           DATE=$(echo "$RELEASE_JSON" | jq -r '.published_at')
+          
+          if [ -z "$FILESIZE" ] || [ "$FILESIZE" == "null" ]; then FILESIZE=0; fi
+          
+          echo "✅ Found iOS Release: $VERSION"
+          echo "📥 Link: $DOWNLOAD_URL"
           
           jq --arg app "$APP_NAME" --arg v "$VERSION" --arg u "$DOWNLOAD_URL" --arg d "$DATE" --argjson s "$FILESIZE" \
           '(.apps[] | select(.name == $app)).versions[0] |= . + {version: $v, date: $d, downloadURL: $u, size: $s}' repo.json > tmp.json && mv tmp.json repo.json
@@ -32,4 +62,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
           git commit -m "🚀 Auto-Updated $APP_NAME to $VERSION" || echo "No changes to commit"
+          
+          # الحماية من تعارض الروبوتات
+          git pull --rebase origin main
           git push

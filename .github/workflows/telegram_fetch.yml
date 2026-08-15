@@ -1,30 +1,26 @@
-name: Auto Telegram IPA Fetcher
+name: Cloudflare R2 IPA Fetcher
 
 on:
-  schedule:
-    - cron: '0 3 * * *' # يشتغل يومياً الساعة 3 الفجر بتوقيت جرينتش
   workflow_dispatch:
     inputs:
       channel_username:
-        description: 'Telegram Channel Username (e.g., tubevault)'
+        description: 'Telegram Channel Username (e.g., m_ipa_real)'
         required: true
-        default: 'tubevault'
+        default: 'm_ipa_real'
       app_name:
-        description: 'App Name exactly as in repo.json'
+        description: 'App Name in repo.json (e.g., Minecraft)'
         required: true
-        default: 'YTPlusM (1.4.2)'
+        default: 'Minecraft'
 
 permissions:
   contents: write
 
 jobs:
-  smart-fetch-telegram:
+  fetch-and-upload-r2:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PAT }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -34,23 +30,16 @@ jobs:
       - name: Install Dependencies
         run: pip install telethon cryptg
 
-      - name: Fetch and Check for Updates
+      - name: Fetch IPA from Telegram
         env:
           TG_API_ID: ${{ secrets.TG_API_ID }}
           TG_API_HASH: ${{ secrets.TG_API_HASH }}
           TG_SESSION: ${{ secrets.TG_SESSION }}
-          INPUT_CHANNEL: ${{ github.event.inputs.channel_username }}
-          INPUT_APP: ${{ github.event.inputs.app_name }}
+          CHANNEL: ${{ github.event.inputs.channel_username }}
         run: |
-          # تحديد القيم الافتراضية إذا اشتغل تلقائي (Cron) بدون تدخل منك
-          CHANNEL=${INPUT_CHANNEL:-"tubevault"}
-          APP_NAME=${INPUT_APP:-"YTPlusM (1.4.2)"}
-          
-          echo "Channel: $CHANNEL | App: $APP_NAME"
-
           cat << 'EOF' > fetch_tg.py
-          import os, asyncio, json
-          from datetime import datetime, timezone
+          import os, asyncio
+          from datetime import timezone
           from telethon.sync import TelegramClient
           from telethon.sessions import StringSession
 
@@ -58,25 +47,11 @@ jobs:
           api_hash = os.environ.get('TG_API_HASH')
           session_str = os.environ.get('TG_SESSION')
           channel = os.environ.get('CHANNEL')
-          app_name = os.environ.get('APP_NAME')
 
           async def main():
-              # 1. جلب تاريخ التطبيق الحالي من ملف repo.json
-              current_date = ""
-              try:
-                  with open('repo.json', 'r') as f:
-                      repo_data = json.load(f)
-                      for app in repo_data.get('apps', []):
-                          if app.get('name') == app_name:
-                              current_date = app.get('versions', [{}])[0].get('date', "")
-                              break
-              except Exception as e:
-                  print("Could not read repo.json correctly.")
-
-              # 2. الاتصال بتيليجرام
               client = TelegramClient(StringSession(session_str), api_id, api_hash)
               await client.connect()
-              print(f"🔍 Searching @{channel} for {app_name}...")
+              print(f"🔍 Searching @{channel} for latest IPA...")
               
               messages = await client.get_messages(channel, limit=20)
               downloaded_file = None
@@ -84,67 +59,60 @@ jobs:
               
               for msg in messages:
                   if msg.document and msg.file.name and msg.file.name.lower().endswith('.ipa'):
-                      # تحويل تاريخ الرسالة لصيغة متوافقة مع متجرك
-                      msg_date = msg.date.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-                      
-                      # 3. المقارنة: هل التحديث جديد؟
-                      if msg_date == current_date:
-                          print("🛑 التطبيق اللي في القناة هو نفس اللي عندك بالمتجر.. ما فيه تحديث جديد!")
-                          await client.disconnect()
-                          exit(0) # الخروج بدون أخطاء وبدون تحميل
-                      
-                      print(f"🚀 تحديث جديد نزل! جاري تحميل: {msg.file.name}...")
+                      msg_date_str = msg.date.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+                      print(f"📥 Found: {msg.file.name}. Downloading...")
                       downloaded_file = await client.download_media(msg, file=msg.file.name)
-                      msg_date_str = msg_date
                       break
               
               await client.disconnect()
               
               if downloaded_file:
+                  # تنظيف اسم الملف من أي مسافات أو رموز لضمان عمل الرابط
+                  clean_name = os.path.basename(downloaded_file).replace(" ", "_")
+                  os.rename(downloaded_file, clean_name)
+                  
                   with open('file_info.env', 'w') as f:
-                      f.write(f"IPA_FILE={downloaded_file}\n")
+                      f.write(f"IPA_FILE={clean_name}\n")
                       f.write(f"NEW_DATE={msg_date_str}\n")
               else:
-                  print("❌ ما لقيت أي ملف IPA في آخر الرسائل.")
+                  print("❌ No IPA found.")
                   exit(1)
 
           asyncio.run(main())
           EOF
-          
-          # تصدير المتغيرات لسكربت البايثون
-          export CHANNEL APP_NAME
           python fetch_tg.py
 
-      - name: Upload to GitHub Releases
-        # هذي الخطوة ما راح تشتغل إلا إذا البايثون لقى تحديث جديد
-        if: success() && hashFiles('file_info.env') != ''
+      - name: Upload to Cloudflare R2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: |
           source file_info.env
-          echo "Uploading $IPA_FILE..."
-          gh release upload nightly "$IPA_FILE" --clobber || gh release create nightly "$IPA_FILE" --clobber
+          echo "Uploading $IPA_FILE to Cloudflare R2..."
+          aws s3 cp "$IPA_FILE" "s3://$R2_BUCKET/$IPA_FILE" --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com"
 
       - name: Update repo.json
-        if: success() && hashFiles('file_info.env') != ''
         env:
-          INPUT_APP: ${{ github.event.inputs.app_name }}
-          REPO_NAME: ${{ github.repository }}
+          APP_NAME: ${{ github.event.inputs.app_name }}
+          R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
         run: |
-          APP_NAME=${INPUT_APP:-"YTPlusM (1.4.2)"}
           source file_info.env
           FILESIZE=$(stat -c%s "$IPA_FILE")
-          SAFE_FILENAME=$(basename "$IPA_FILE" | tr ' ' '.')
-          URL="https://github.com/$REPO_NAME/releases/download/nightly/$SAFE_FILENAME"
           
-          # استخدام تاريخ رسالة تيليجرام كإصدار للتطبيق
+          # تجهيز الرابط المباشر
+          DIRECT_URL="${R2_PUBLIC_URL}/${IPA_FILE}"
           VERSION=$(date -d "${NEW_DATE}" +"%Y.%m.%d")
           
-          jq --arg app "$APP_NAME" --arg v "$VERSION" --arg u "$URL" --arg d "$NEW_DATE" --argjson s "$FILESIZE" \
+          echo "Direct Link: $DIRECT_URL"
+          
+          jq --arg app "$APP_NAME" --arg v "$VERSION" --arg u "$DIRECT_URL" --arg d "$NEW_DATE" --argjson s "$FILESIZE" \
           '(.apps[] | select(.name == $app)).versions[0] |= . + {version: $v, date: $d, downloadURL: $u, size: $s}' repo.json > tmp.json && mv tmp.json repo.json
           
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo.json
-          git commit -m "🚀 Auto-Updated $APP_NAME from Telegram"
+          git commit -m "🚀 Auto-Updated $APP_NAME (Hosted on Cloudflare R2)"
           git push

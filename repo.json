@@ -412,10 +412,10 @@
       "category": "games",
       "versions": [
         {
-          "version": "1.0",
-          "date": "2026-08-15T00:00:00Z",
-          "downloadURL": "رابط_مؤقت",
-          "size": 0
+          "version": "EnsWilde3.1.3",
+          "date": "2026-02-25T15:28:02Z",
+          "downloadURL": "https://github.com/YangJiiii/EnsWilde/releases/download/EnsWilde3.1.3/EnsWilde.ipa",
+          "size": 13591314
         }
       ]
     },

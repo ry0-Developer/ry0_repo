@@ -92,7 +92,7 @@
     {
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
-      "developerName": "Henrik Rydgård",
+      "developerName": "Henrik Rydg\u00e5rd",
       "localizedDescription": "PSP emulator for iOS.",
       "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",
@@ -251,6 +251,23 @@
       ]
     },
     {
+      "name": "Minecraft",
+      "bundleIdentifier": "com.mojang.minecraftpe",
+      "developerName": "Mojang",
+      "localizedDescription": "Minecraft iOS port updated automatically via Cloudflare R2.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/Minecraft-icon.png",
+      "tintColor": "#4B8B3B",
+      "category": "games",
+      "versions": [
+        {
+          "version": "1.26.44",
+          "date": "2026-08-15T10:33:41Z",
+          "downloadURL": "https://pub-81c90c3c0b074181af4429cfa53519f0.r2.dev/Minecraft_1.26.44.ipa",
+          "size": 730750810
+        }
+      ]
+    },
+    {
       "name": "YTPlusYTweaks (5.2.2 - iOS SDK 16.5)",
       "bundleIdentifier": "com.google.ios.youtube.ytplusytweaks.ios.sdk.16.5.latest",
       "developerName": "YouTube",
@@ -287,23 +304,6 @@
         }
       ],
       "category": "entertainment"
-    },
-    {
-      "name": "Minecraft",
-      "bundleIdentifier": "com.mojang.minecraftpe",
-      "developerName": "Mojang",
-      "localizedDescription": "Minecraft iOS port updated automatically via Cloudflare R2.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/Minecraft-icon.png",
-      "tintColor": "#4B8B3B",
-      "category": "games",
-      "versions": [
-        {
-          "version": "1.26.44",
-          "date": "2026-08-15T10:33:41Z",
-          "downloadURL": "https://pub-81c90c3c0b074181af4429cfa53519f0.r2.dev/Minecraft_1.26.44.ipa",
-          "size": 730750810
-        }
-      ]
     }
   ]
 }

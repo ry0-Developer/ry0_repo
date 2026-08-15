@@ -1,5 +1,4 @@
-name: Update LiveContainer + SideStore (Stable)
-
+name: Update LC+SS Stable
 on:
   workflow_dispatch:
 

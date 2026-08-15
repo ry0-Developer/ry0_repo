@@ -1,4 +1,4 @@
-name: Update LiveContainer Stable
+name: Update LiveContainer + SideStore (Stable)
 
 on:
   workflow_dispatch:
@@ -29,16 +29,11 @@ jobs:
             exit 1
           fi
           
-          # 1. محاولة جلب النسخة المدمجة مع SideStore
+          # البحث الحصري عن النسخة المدمجة مع SideStore فقط
           IPA_ASSET=$(echo "$RELEASE_JSON" | jq -c '.assets[] | select(.name | ascii_downcase | contains("sidestore") and endswith(".ipa"))' | head -n 1)
           
-          # 2. إذا لم تتوفر، يتم جلب النسخة العادية
           if [ -z "$IPA_ASSET" ]; then
-            IPA_ASSET=$(echo "$RELEASE_JSON" | jq -c '.assets[] | select(.name | ascii_downcase | endswith(".ipa"))' | head -n 1)
-          fi
-          
-          if [ -z "$IPA_ASSET" ]; then
-            echo "❌ No IPA file found."
+            echo "❌ No SideStore bundled IPA found in the latest release. Skipping..."
             exit 1
           fi
           

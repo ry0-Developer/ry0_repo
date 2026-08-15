@@ -16,7 +16,7 @@
       "category": "games",
       "versions": [
         {
-          "version": "2026.08.14.1246",
+          "version": "2026.08.15.0047",
           "date": "2026-04-02T00:00:00Z",
           "downloadURL": "https://github.com/ry0-x/ry0_repo/releases/download/nightly/amethyst.ipa",
           "size": 150357372
@@ -92,7 +92,7 @@
     {
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
-      "developerName": "Henrik Rydg\u00e5rd",
+      "developerName": "Henrik Rydgård",
       "localizedDescription": "PSP emulator for iOS.",
       "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0_repo/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",

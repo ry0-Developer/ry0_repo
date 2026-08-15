@@ -234,6 +234,88 @@
       }
     },
     {
+      "name": "LiveContainer (Stable)",
+      "bundleIdentifier": "com.kdt.livecontainer.standalone.stable",
+      "developerName": "(Stable)",
+      "localizedDescription": "Stable release: Standalone version of LiveContainer. Run iOS apps without installing them seamlessly.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/LC-icon.png",
+      "tintColor": "#000000",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-08-15T00:00:00Z",
+          "downloadURL": "رابط_مؤقت",
+          "size": 0
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "get-task-allow",
+          "com.apple.private.security.no-sandbox",
+          "com.apple.private.security.container-required"
+        ]
+      }
+    },
+    {
+      "name": "LiveContainer (Nightly)",
+      "bundleIdentifier": "com.kdt.livecontainer.standalone.nightly",
+      "developerName": "(Nightly)",
+      "localizedDescription": "Nightly release: Standalone version of LiveContainer.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/LC-icon.png",
+      "tintColor": "#FF2D55",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-08-15T00:00:00Z",
+          "downloadURL": "رابط_مؤقت",
+          "size": 0
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "get-task-allow",
+          "com.apple.private.security.no-sandbox",
+          "com.apple.private.security.container-required"
+        ]
+      }
+    },
+    {
+      "name": "SideStore (Stable)",
+      "bundleIdentifier": "com.SideStore.SideStore",
+      "developerName": "SideStore Team",
+      "localizedDescription": "Stable release: SideStore is an alternative app store for non-jailbroken iOS devices.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/SideStore-icon.png",
+      "tintColor": "#29007a",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-08-15T00:00:00Z",
+          "downloadURL": "رابط_مؤقت",
+          "size": 0
+        }
+      ]
+    },
+    {
+      "name": "SideStore (Nightly)",
+      "bundleIdentifier": "com.SideStore.SideStore.Nightly",
+      "developerName": "SideStore Team",
+      "localizedDescription": "Nightly release: Experience the latest beta features of SideStore.",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/SideStore-icon.png",
+      "tintColor": "#29007a",
+      "category": "utilities",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-08-15T00:00:00Z",
+          "downloadURL": "رابط_مؤقت",
+          "size": 0
+        }
+      ]
+    },
+    {
       "name": "GetMoreRam",
       "bundleIdentifier": "com.hugeblack.getmoreram",
       "developerName": "hugeBlack",

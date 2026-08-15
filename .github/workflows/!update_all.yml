@@ -1,0 +1,118 @@
+name: Update ALL Apps
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+jobs:
+  trigger-all:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run Workflows Sequentially
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Starting Master Update Queue..."
+          
+          gh workflow run 3105.yml || true
+          echo "3105 triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run ARMSX2_Nightly.yml || true
+          echo "ARMSX2 (Nightly) triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run ARMSX2_Stable.yml || true
+          echo "ARMSX2 (Stable) triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run EnsWilde.yml || true
+          echo "EnsWilde triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run JESSI.yml || true
+          echo "JESSI triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run LC+SS_nightly.yml || true
+          echo "LiveContainer+SideStore (Nightly) triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run LC+SS_stable.yml || true
+          echo "LiveContainer+SideStore (Stable) triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run LC_nightly.yml || true
+          echo "LiveContainer Standalone (Nightly) triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run LC_stable.yml || true
+          echo "LiveContainer Standalone (Stable) triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run PancakeStore.yml || true
+          echo "PancakeStore triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run SideInstaller.yml || true
+          echo "SideInstaller triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run SideStore_nightly.yml || true
+          echo "SideStore (Nightly) triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run SideStore_stable.yml || true
+          echo "SideStore (Stable) triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run amethyst.yml || true
+          echo "Amethyst triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run dolphinios.yml || true
+          echo "DolphiniOS triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run getmoreram.yml || true
+          echo "GetMoreRam triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run lara.yml || true
+          echo "lara triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run manic.yml || true
+          echo "Manic triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run melonx.yml || true
+          echo "MeloNX triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run mond.yml || true
+          echo "mond triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run ppsspp.yml || true
+          echo "PPSSPP triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run xenios.yml || true
+          echo "Xenios triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run telegram_fetch.yml || true
+          echo "Minecraft R2 Fetcher triggered. Waiting 120 seconds..."
+          sleep 120
+          
+          gh workflow run smart_sync_youtube.yml || true
+          echo "Smart Sync YouTube triggered! Master Queue completed."

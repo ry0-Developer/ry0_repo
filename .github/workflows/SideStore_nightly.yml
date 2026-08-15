@@ -1,0 +1,62 @@
+name: Update SideStore (Nightly)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Direct Link and Update repo.json
+        env:
+          TARGET_REPO: "SideStore/SideStore"
+          APP_NAME: "SideStore (Nightly)"
+        run: |
+          echo "🔍 Searching for nightly release in $TARGET_REPO..."
+          
+          # البحث عن إصدار Nightly باستخدام التاغ
+          RELEASE_JSON=$(curl -sL "https://api.github.com/repos/$TARGET_REPO/releases/tags/nightly")
+          VERSION=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
+          
+          # إذا ما لقى تاغ nightly، يجيب أحدث إصدار Prerelease
+          if [ "$VERSION" == "null" ] || [ -z "$VERSION" ]; then
+            RELEASE_JSON=$(curl -sL "https://api.github.com/repos/$TARGET_REPO/releases" | jq -c '[.[] | select(.prerelease == true)] | .[0]')
+            VERSION=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
+          fi
+
+          if [ "$VERSION" == "null" ] || [ -z "$VERSION" ]; then
+            echo "❌ No nightly release found."
+            exit 1
+          fi
+          
+          IPA_ASSET=$(echo "$RELEASE_JSON" | jq -c '.assets[] | select(.name | ascii_downcase | endswith(".ipa"))' | head -n 1)
+          
+          if [ -z "$IPA_ASSET" ]; then
+            echo "❌ No IPA found in the nightly release."
+            exit 1
+          fi
+          
+          DOWNLOAD_URL=$(echo "$IPA_ASSET" | jq -r '.browser_download_url')
+          FILESIZE=$(echo "$IPA_ASSET" | jq -r '.size')
+          DATE=$(echo "$IPA_ASSET" | jq -r '.updated_at')
+          
+          # ترتيب اسم الإصدار ليكون منظم
+          CLEAN_VERSION="Nightly-$(date -d "$DATE" +'%Y.%m.%d')"
+          
+          echo "✅ Found Direct Link: $DOWNLOAD_URL"
+          echo "🚀 Updating $APP_NAME to version $CLEAN_VERSION"
+          
+          jq --arg app "$APP_NAME" --arg v "$CLEAN_VERSION" --arg u "$DOWNLOAD_URL" --arg d "$DATE" --argjson s "$FILESIZE" \
+          '(.apps[] | select(.name == $app)).versions[0] |= . + {version: $v, date: $d, downloadURL: $u, size: $s}' repo.json > tmp.json && mv tmp.json repo.json
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add repo.json
+          git commit -m "🚀 Auto-Updated $APP_NAME (Direct Link)" || echo "No changes to commit"
+          git push

@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       channel_username:
-        description: 'Telegram Channel Username (e.g., m_ipa_real)'
+        description: 'Telegram Channel Username'
         required: true
         default: 'm_ipa_real'
       app_name:
-        description: 'App Name in repo.json (e.g., Minecraft)'
+        description: 'App Name in repo.json'
         required: true
         default: 'Minecraft'
 
@@ -38,7 +38,7 @@ jobs:
           CHANNEL: ${{ github.event.inputs.channel_username }}
         run: |
           cat << 'EOF' > fetch_tg.py
-          import os, asyncio
+          import os, asyncio, re
           from datetime import timezone
           from telethon.sync import TelegramClient
           from telethon.sessions import StringSession
@@ -67,11 +67,13 @@ jobs:
               await client.disconnect()
               
               if downloaded_file:
-                  # تنظيف اسم الملف من أي مسافات أو رموز لضمان عمل الرابط
-                  clean_name = os.path.basename(downloaded_file).replace(" ", "_")
+                  # تنظيف اسم الملف بالكامل من أي رموز غريبة أو مسافات لتجنب أي أخطاء
+                  clean_name = re.sub(r'[^A-Za-z0-9_.-]', '_', os.path.basename(downloaded_file))
                   os.rename(downloaded_file, clean_name)
                   
-                  with open('file_info.env', 'w') as f:
+                  # استخدام الطريقة الرسمية والآمنة لحفظ المتغيرات في GitHub
+                  env_file = os.environ.get('GITHUB_ENV')
+                  with open(env_file, 'a') as f:
                       f.write(f"IPA_FILE={clean_name}\n")
                       f.write(f"NEW_DATE={msg_date_str}\n")
               else:
@@ -90,7 +92,6 @@ jobs:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: |
-          source file_info.env
           echo "Uploading $IPA_FILE to Cloudflare R2..."
           aws s3 cp "$IPA_FILE" "s3://$R2_BUCKET/$IPA_FILE" --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com"
 
@@ -99,7 +100,6 @@ jobs:
           APP_NAME: ${{ github.event.inputs.app_name }}
           R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
         run: |
-          source file_info.env
           FILESIZE=$(stat -c%s "$IPA_FILE")
           
           # تجهيز الرابط المباشر

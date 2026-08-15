@@ -303,7 +303,7 @@
       "bundleIdentifier": "com.SideStore.SideStore.Nightly",
       "developerName": "SideStore Team",
       "localizedDescription": "Nightly release: Experience the latest beta features of SideStore.",
-      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/SideStore-icon.png",
+      "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/SideStore-nightly-icon.png",
       "tintColor": "#29007a",
       "category": "utilities",
       "versions": [

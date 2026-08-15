@@ -508,10 +508,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "1.0",
-          "date": "2026-08-15T00:00:00Z",
-          "downloadURL": "رابط_مؤقت",
-          "size": 0
+          "version": "1.0.1",
+          "date": "2026-03-30T23:25:32Z",
+          "downloadURL": "https://github.com/Baconium/JESSI/releases/download/1.0.1/JESSI.ipa",
+          "size": 9284359
         }
       ]
     },

@@ -92,7 +92,7 @@
     {
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
-      "developerName": "Henrik Rydg\u00e5rd",
+      "developerName": "Henrik Rydgård",
       "localizedDescription": "PSP emulator for iOS.",
       "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",
@@ -486,10 +486,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "development",
-          "date": "2026-08-14T20:02:21Z",
-          "downloadURL": "https://github.com/rooootdev/mond/releases/download/development/mond.ipa",
-          "size": 3206037
+          "version": "latest",
+          "date": "2026-08-16T03:10:54Z",
+          "downloadURL": "https://github.com/rooootdev/mond/releases/download/latest/mond.ipa",
+          "size": 3332224
         }
       ]
     },

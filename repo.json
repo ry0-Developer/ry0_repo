@@ -486,10 +486,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "latest",
-          "date": "2026-08-16T03:10:54Z",
-          "downloadURL": "https://github.com/rooootdev/mond/releases/download/latest/mond.ipa",
-          "size": 3332224
+          "version": "2.1",
+          "date": "2026-08-16T12:00:45Z",
+          "downloadURL": "https://github.com/rooootdev/mond/releases/download/2.1/mond.ipa",
+          "size": 3333393
         }
       ]
     },

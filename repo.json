@@ -92,7 +92,7 @@
     {
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
-      "developerName": "Henrik Rydg\u00e5rd",
+      "developerName": "Henrik Rydgård",
       "localizedDescription": "PSP emulator for iOS.",
       "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",
@@ -308,10 +308,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "Nightly-2026.08.15",
-          "date": "2026-08-15T05:24:47Z",
+          "version": "Nightly-2026.08.16",
+          "date": "2026-08-16T01:03:33Z",
           "downloadURL": "https://github.com/SideStore/SideStore/releases/download/nightly/SideStore.ipa",
-          "size": 25087502
+          "size": 25123684
         }
       ]
     },

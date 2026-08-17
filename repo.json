@@ -92,7 +92,7 @@
     {
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
-      "developerName": "Henrik Rydgård",
+      "developerName": "Henrik Rydg\u00e5rd",
       "localizedDescription": "PSP emulator for iOS.",
       "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",
@@ -510,20 +510,20 @@
       ]
     },
     {
-      "name": "YTPlusYTweaks (5.2.2 - iOS SDK 16.5)",
-      "bundleIdentifier": "com.google.ios.youtube.ytplusytweaks.ios.sdk.16.5.latest",
+      "name": "YTKACE (0.8.4)",
+      "bundleIdentifier": "com.google.ios.youtube.ytkace.0.8.4",
       "developerName": "YouTube",
       "iconURL": "https://static.vecteezy.com/system/resources/previews/023/986/704/non_2x/youtube-logo-youtube-logo-transparent-youtube-icon-transparent-free-free-png.png",
-      "subtitle": "Mod by fosterbarnes (LegalizeFlorskin), updated to latest version of YouTube by Drifty",
-      "localizedDescription": "This is a modded version of YouTube with the following tweaks:\nYouPiP, YTUHD, Return YouTube Dislikes, YouQuality, DontEatMyContent, YTABConfig, YTIcons, YTweaks, YouGroupSettings, Gonerino, YouMute (NEW), YouLoop (NEW), YouSpeed (NEW), YouGetCaption (NEW), YouFixPlaybackIssues (NEW), and AutoFLEX.\n You can see more information about the mod at: https://github.com/fosterbarnes/YTPlusYTweaks",
+      "subtitle": "Mod by Itzzace0 (Epic0001)",
+      "localizedDescription": "This is a modded version of YouTube.\nSource Code: https://github.com/itzzace/YTKACE",
       "tintColor": "#848ef9",
       "versions": [
         {
           "version": "21.32.4",
-          "date": "2026-08-10T00:00:00Z",
+          "date": "2026-08-17T00:00:00Z",
           "localizedDescription": "This uses 21.32.4 version of YouTube.",
-          "downloadURL": "https://repo.ballermc.com/tubevault/YTPlusYTweaks_custom_SDK16.5_v21.32.4.ipa",
-          "size": 136028722
+          "downloadURL": "https://repo.ballermc.com/tubevault/YTKACE_0.8.4_YouTube_21.32.4.ipa",
+          "size": 131859440
         }
       ],
       "category": "entertainment"

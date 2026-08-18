@@ -92,7 +92,7 @@
     {
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
-      "developerName": "Henrik Rydgård",
+      "developerName": "Henrik Rydg\u00e5rd",
       "localizedDescription": "PSP emulator for iOS.",
       "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",
@@ -538,11 +538,11 @@
       "tintColor": "#848ef9",
       "versions": [
         {
-          "version": "9.32.4",
-          "date": "2026-08-11T00:00:00Z",
-          "localizedDescription": "This uses 9.32.4 version of YouTube Music.",
-          "downloadURL": "https://repo.ballermc.com/tubevault/YTMUltimate%2B_2.4.1_9.32.4.ipa",
-          "size": 103091286
+          "version": "9.33.3",
+          "date": "2026-08-17T00:00:00Z",
+          "localizedDescription": "This uses 9.33.3 version of YouTube Music.",
+          "downloadURL": "https://repo.ballermc.com/tubevault/YTMUltimate%2B_2.4.1_9.33.3%5Btg%40tubevault%5D.ipa",
+          "size": 103956657
         }
       ],
       "category": "entertainment"

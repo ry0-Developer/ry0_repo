@@ -308,10 +308,10 @@
       "category": "utilities",
       "versions": [
         {
-          "version": "Nightly-2026.08.18",
-          "date": "2026-08-18T02:21:14Z",
+          "version": "Nightly-2026.08.19",
+          "date": "2026-08-19T05:15:10Z",
           "downloadURL": "https://github.com/SideStore/SideStore/releases/download/nightly/SideStore.ipa",
-          "size": 25743495
+          "size": 25746098
         }
       ]
     },

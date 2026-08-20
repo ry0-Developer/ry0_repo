@@ -92,7 +92,7 @@
     {
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
-      "developerName": "Henrik Rydg\u00e5rd",
+      "developerName": "Henrik Rydgård",
       "localizedDescription": "PSP emulator for iOS.",
       "iconURL": "https://raw.githubusercontent.com/ry0-x/ry0-x.github.io/main/icons/PPSPP-icon.png",
       "tintColor": "#224A8B",
@@ -390,10 +390,10 @@
       "category": "games",
       "versions": [
         {
-          "version": "v1.0.1",
-          "date": "2026-08-15T08:37:54Z",
-          "downloadURL": "https://github.com/YangJiiii/3105/releases/download/v1.0.1/3105-v1.0.1-build5-MobileHouseArrest-unsigned.ipa",
-          "size": 4228516
+          "version": "v1.1.1",
+          "date": "2026-08-19T17:23:28Z",
+          "downloadURL": "https://github.com/YangJiiii/3105/releases/download/v1.1.1/3105-unsigned.ipa",
+          "size": 3281026
         }
       ]
     },
